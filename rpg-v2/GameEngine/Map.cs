@@ -134,8 +134,8 @@ namespace game.GameEngine
             var random = new Random();
             while (true)
             {
-                var x = random.Next(1, maxLength - 1);
-                var y = random.Next(1, maxLength - 1);
+                var x = random.Next(1, size - 1);
+                var y = random.Next(1, size - 1);
                 if (!map[x][y])
                 {
                     //register zombie
@@ -149,6 +149,7 @@ namespace game.GameEngine
                     sprite.AtlasPositionY = 5;
                     sprite.Layer = 1;
                     sprite.Color = Color.DarkGreen;
+                    sprite.IsVisibleOutOfSight = false;
                     var physics = (Physics) zombie.Components[3];
                     physics.IsCollidable = true;
                     physics.BlocksVision = false;

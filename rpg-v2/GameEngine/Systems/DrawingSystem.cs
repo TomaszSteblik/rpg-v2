@@ -47,13 +47,25 @@ namespace game.GameEngine.Systems
                 }
                 else if(playerVision.VisitedCells[position.X][position.Y])
                 {
-                    DrawEntity(spriteBatch,position,sprite,Color.Gray);
+                    if (sprite.IsVisibleOutOfSight)
+                    {
+                        DrawEntity(spriteBatch,position,sprite,Color.Gray);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(MainGame.SpriteAtlas,new Vector2(position.X*16,position.Y*16),
+                            new Rectangle(11*16,13*16,16,16),Color.Black);
+                        spriteBatch.Draw(MainGame.SpriteAtlas,new Vector2(position.X*16,position.Y*16),
+                            new Rectangle(10*16,15*16,16,16),Color.Gray);
+                    }
+                    
                 }
                 else
                 {
                     spriteBatch.Draw(MainGame.SpriteAtlas,new Vector2(position.X*16,position.Y*16),
                         new Rectangle(11*16,13*16,16,16),Color.Black);
                 }
+                
             }
         }
     }

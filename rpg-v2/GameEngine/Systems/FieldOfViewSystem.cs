@@ -59,6 +59,7 @@ namespace game.GameEngine.Systems
             var blocked = false;
             for (int i = row; i < vision.Sight; i++)
             {
+                //TODO: IDK CZY FLOOR CZY ROUND BO SCRASHUJE
                 var minCol = (int)Math.Round(i * startSlope);
                 var maxCol = (int)Math.Round(i * endSlope);
                 if (!blocked)
@@ -68,6 +69,8 @@ namespace game.GameEngine.Systems
                         var deltaY = j * yy + i*yx;
                         var deltaX = i * xx + j*xy;
 
+                        if(deltaX+startX < 0 || startY+deltaY < 0)
+                            continue;
 
                         var doesBlockingEntityExist = Entities.ContainsKey(new Position(){X = deltaX+startX,Y = startY+deltaY});
                             

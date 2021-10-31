@@ -8,11 +8,13 @@ namespace game.GameEngine.Components
         public int AtlasPositionY { get; set; }
         public Color Color { get; set; }
         public int Layer { get; set; }
+        public bool IsVisibleOutOfSight { get; set; }
 
         public Sprite()
         {
             Color = Color.White;
             Layer = 0;
+            IsVisibleOutOfSight = true;
         }
     }
 }
