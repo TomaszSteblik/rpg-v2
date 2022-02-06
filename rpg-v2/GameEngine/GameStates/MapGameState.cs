@@ -22,8 +22,8 @@ namespace game.GameEngine.GameStates
         public void Update(GameTime gameTime)
         {
             PlayerInputAndMovementSystem.Act(gameTime);
+            HealthSystem.Act();
             FieldOfViewSystem.Act();
-            
         }
 
         public MapGameState()

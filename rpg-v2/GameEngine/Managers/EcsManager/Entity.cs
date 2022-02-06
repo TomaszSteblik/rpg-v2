@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace game.GameEngine
 {
     public class Entity
     {
         public Guid Guid { get; set; }
-        
         public Component[] Components;
+        
         public bool[] Mask;
         
 

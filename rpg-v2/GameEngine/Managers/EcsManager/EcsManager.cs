@@ -7,12 +7,12 @@ namespace game.GameEngine
 {
     public static class EcsManager
     {
-        private static ICollection<Entity> Entities;
+        private static ICollection<Entity> _entities;
         public static HashSet<Type> ComponentsTypes;
         public static int ComponentsCount => ComponentsTypes.Count;
         public static void Init()
         {
-            Entities = new List<Entity>();
+            _entities = new List<Entity>();
             ComponentsTypes = new HashSet<Type>();
 
             ComponentsTypes.Add(typeof(Position));      //0
@@ -21,13 +21,14 @@ namespace game.GameEngine
             ComponentsTypes.Add(typeof(Physics));       //3
             ComponentsTypes.Add(typeof(Vision));        //4
             ComponentsTypes.Add(typeof(Pathfinding));   //5
+            ComponentsTypes.Add(typeof(Health));        //6
         }
 
         public static ICollection<Entity> QueryEntitiesByComponentsIndexes(int[] componentsIndexes)
         {
             var entitiesThatMatchMask = new Collection<Entity>();
 
-            foreach (var entity in Entities)
+            foreach (var entity in _entities)
             {
                 var didMatchMask = true;
                 for (var i = 0; i < componentsIndexes.Length; i++)
@@ -53,7 +54,7 @@ namespace game.GameEngine
                 entity.Mask[componentsIndexes[i]] = true;
             }
             
-            Entities.Add(entity);
+            _entities.Add(entity);
             
 
             return entity;
@@ -62,12 +63,20 @@ namespace game.GameEngine
         {
             var entity = new Entity();
 
-            Entities.Add(entity);
+            _entities.Add(entity);
             
 
             return entity;
         }
 
+        public static void UnregisterEntity(Entity entity)
+        {
+            _entities.Remove(entity);
+        }
 
+        public static ICollection<Entity> GetAllEntities()
+        {
+            return _entities;
+        }
     }
 }

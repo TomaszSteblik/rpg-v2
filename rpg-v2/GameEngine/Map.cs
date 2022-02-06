@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using game.GameEngine.Components;
 using Microsoft.Xna.Framework;
 using rpg_v2;
@@ -141,9 +142,11 @@ namespace game.GameEngine
                     //register zombie
                     var zombie = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 4, 5});
                     
+                    Debug.WriteLine($"Zombie position: x: {x} y: {y}");
+                    
                     var pos = (zombie.Components[0] as Position);
-                    pos.X = x;
-                    pos.Y = y;
+                    pos.X = y;
+                    pos.Y = x;
                     var sprite = (zombie.Components[1] as Sprite);
                     sprite.AtlasPositionX = 10;
                     sprite.AtlasPositionY = 5;
@@ -153,6 +156,8 @@ namespace game.GameEngine
                     var physics = (Physics) zombie.Components[3];
                     physics.IsCollidable = true;
                     physics.BlocksVision = false;
+                    var health = (Health) zombie.Components[6];
+                    health.Hp = 12;
                     
                     break;
                 }

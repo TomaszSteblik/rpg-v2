@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Text.Json;
 using game.GameEngine.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -20,7 +23,8 @@ namespace game.GameEngine.Systems
                                        && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y))
                     ((Position) MainGame.PlayerEntity.Components[0]).X--;
                     
-          
+                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+
             },true);
             
             
@@ -33,7 +37,8 @@ namespace game.GameEngine.Systems
                                        && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y-1))
                     ((Position) MainGame.PlayerEntity.Components[0]).Y--;
           
-           
+                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+
                 
             },true);
             
@@ -48,7 +53,8 @@ namespace game.GameEngine.Systems
                 ((Position) MainGame.PlayerEntity.Components[0]).X++;
                 
             
-                
+                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+
                 
             },true);
             
@@ -62,8 +68,19 @@ namespace game.GameEngine.Systems
                                        && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y+1))
                     ((Position) MainGame.PlayerEntity.Components[0]).Y++;
             
-                
+                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+
             },true);
+            
+            InputManager.StartTrackingKey(Keys.S, () =>
+            {
+                //saving here
+                var entities = EcsManager.GetAllEntities();
+                var serialized = JsonSerializer.Serialize(entities,new JsonSerializerOptions()
+                {
+                });
+                Console.WriteLine();
+            });
         }
 
         public static void Act(GameTime gameTime)
