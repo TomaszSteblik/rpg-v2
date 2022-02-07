@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using game.GameEngine.Components;
+using game.GameEngine.GameObjects.Npcs;
 using Microsoft.Xna.Framework;
 using rpg_v2;
 using Action = game.GameEngine.Components.Action;
@@ -25,11 +27,12 @@ namespace game.GameEngine
             var startingX = MainGame.Random.Next(1, size-1);
             var startingY = MainGame.Random.Next(1, size-1);
             
-            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 2,4});
+            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 2, 4});
 
             var position = (Position) MainGame.PlayerEntity.Components[0];
             var spriteP = (Sprite) MainGame.PlayerEntity.Components[1];
             var vision = (Vision) MainGame.PlayerEntity.Components[4];
+            var physicsPlayer = (Physics) MainGame.PlayerEntity.Components[3];
             position.X = startingX;
             position.Y = startingY;
             spriteP.Color = Color.White;
@@ -37,6 +40,7 @@ namespace game.GameEngine
             spriteP.AtlasPositionY = 4;
             spriteP.Layer = 1;
             vision.Sight = 10;
+            physicsPlayer.IsCollidable = true;
 
             var currentColumn = startingX;
             var currentRow = startingY;
@@ -132,73 +136,54 @@ namespace game.GameEngine
                     }
                 }
             }
+            
+            Zombie.GenerateOnRandomPosition();
+            Zombie.GenerateOnRandomPosition();
+            Zombie.GenerateOnRandomPosition();
+            Zombie.GenerateOnRandomPosition();
+            Zombie.GenerateOnRandomPosition();
+            Zombie.GenerateOnRandomPosition();
 
-            var random = new Random();
+        }
+
+        public static bool IsPositionOccupiedByCollidableEntity(int x,int y)
+        {
+            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0, 3});
+
+            return entites.Any(z => ((Position) z.Components[0]).X == x 
+                                    && ((Position) z.Components[0]).Y == y 
+                                    && ((Physics) z.Components[3]).IsCollidable == true);
+
+        }
+
+        public static Position GetRandomNotOccupiedPosition()
+        {
+            var random = MainGame.Random;
+
+            int x, y;
+        
+            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0, 3});
+            var positions =  entites.Where(z => ((Physics) z.Components[3]).IsCollidable == false).ToList();
+        
             while (true)
             {
-                var x = random.Next(1, size - 1);
-                var y = random.Next(1, size - 1);
-                if (!map[x][y])
+            
+
+                var entity = positions[random.Next(positions.Count)];
+                var position = (Position) positions[random.Next(positions.Count)].Components[0];
+
+            
+                if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
                 {
-                    //register zombie
-                    var zombie = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 4, 5, 6, 7});
-                    
-                    Debug.WriteLine($"Zombie position: x: {x} y: {y}");
-                    
-                    var pos = (zombie.Components[0] as Position);
-                    pos.X = y;
-                    pos.Y = x;
-                    var sprite = (zombie.Components[1] as Sprite);
-                    sprite.AtlasPositionX = 10;
-                    sprite.AtlasPositionY = 5;
-                    sprite.Layer = 1;
-                    sprite.Color = Color.DarkGreen;
-                    sprite.IsVisibleOutOfSight = false;
-                    var physics = (Physics) zombie.Components[3];
-                    physics.IsCollidable = true;
-                    physics.BlocksVision = false;
-                    var health = (Health) zombie.Components[6];
-                    health.Hp = 12;
-
-                    var pathfinding = (Pathfinding) zombie.Components[5];
-                    var action = (Action) zombie.Components[7];
-
-                    pathfinding.NeedToFindNewPath = true;
-                    pathfinding.TargetX = startingX;
-                    pathfinding.TargetY = startingY;
-                    
-                    action.EntityAction = () =>
-                    {
-                        if (pathfinding.Step >= pathfinding.Path.Count)
-                        {
-                            pathfinding.NeedToFindNewPath = true;
-                            while (true)
-                            {
-                                var nx = random.Next(1, size - 1);
-                                var ny = random.Next(1, size - 1);
-
-                                if (!map[nx][ny])
-                                {
-                                    pathfinding.TargetX = ny;
-                                    pathfinding.TargetY = nx;
-                                    break;
-                                }
-                            }
-
-                            return;
-                        }
-                        pos.X = pathfinding.Path[pathfinding.Step].X;
-                        pos.Y = pathfinding.Path[pathfinding.Step].Y;
-                        pathfinding.Step++;
-                        Debug.WriteLine($"Zombie moved to X: {pos.X} Y: {pos.Y}");
-                    };
-                    
-                    
-                    
+                    x = position.X;
+                    y = position.Y;
                     break;
                 }
+            
+                positions.Remove(entity);
             }
 
+            return new Position() {X = x, Y = y};
         }
     }
 }

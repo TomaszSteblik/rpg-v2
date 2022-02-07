@@ -24,7 +24,6 @@ namespace game.GameEngine.Systems
                     ((Position) MainGame.PlayerEntity.Components[0]).X--;
                     
                 Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
-                ActionSystem.Act();
             },true);
             
             
@@ -38,7 +37,6 @@ namespace game.GameEngine.Systems
                     ((Position) MainGame.PlayerEntity.Components[0]).Y--;
           
                 Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
-                ActionSystem.Act();
                 
             },true);
             
@@ -54,7 +52,6 @@ namespace game.GameEngine.Systems
                 
             
                 Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
-                ActionSystem.Act();
                 
             },true);
             
@@ -69,7 +66,6 @@ namespace game.GameEngine.Systems
                     ((Position) MainGame.PlayerEntity.Components[0]).Y++;
             
                 Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
-                ActionSystem.Act();
             },true);
             
             InputManager.StartTrackingKey(Keys.S, () =>
