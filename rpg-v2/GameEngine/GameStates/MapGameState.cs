@@ -22,6 +22,10 @@ namespace game.GameEngine.GameStates
         public void Update(GameTime gameTime)
         {
             PlayerInputAndMovementSystem.Act(gameTime);
+            //ActionSystem - actions done by entities for example: select target for pathfinding, move to next tile, heal, wait, cast etc.
+            ActionSystem.Act();
+            //Pathfinding - if entity have bool toPathFind or sth then find path to target tile
+            PathfindingSystem.Act();
             HealthSystem.Act();
             FieldOfViewSystem.Act();
         }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using game.GameEngine.Components;
 using Microsoft.Xna.Framework;
 using rpg_v2;
+using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine
 {
@@ -140,7 +141,7 @@ namespace game.GameEngine
                 if (!map[x][y])
                 {
                     //register zombie
-                    var zombie = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 4, 5});
+                    var zombie = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 4, 5, 6, 7});
                     
                     Debug.WriteLine($"Zombie position: x: {x} y: {y}");
                     
@@ -158,6 +159,41 @@ namespace game.GameEngine
                     physics.BlocksVision = false;
                     var health = (Health) zombie.Components[6];
                     health.Hp = 12;
+
+                    var pathfinding = (Pathfinding) zombie.Components[5];
+                    var action = (Action) zombie.Components[7];
+
+                    pathfinding.NeedToFindNewPath = true;
+                    pathfinding.TargetX = startingX;
+                    pathfinding.TargetY = startingY;
+                    
+                    action.EntityAction = () =>
+                    {
+                        if (pathfinding.Step >= pathfinding.Path.Count)
+                        {
+                            pathfinding.NeedToFindNewPath = true;
+                            while (true)
+                            {
+                                var nx = random.Next(1, size - 1);
+                                var ny = random.Next(1, size - 1);
+
+                                if (!map[nx][ny])
+                                {
+                                    pathfinding.TargetX = ny;
+                                    pathfinding.TargetY = nx;
+                                    break;
+                                }
+                            }
+
+                            return;
+                        }
+                        pos.X = pathfinding.Path[pathfinding.Step].X;
+                        pos.Y = pathfinding.Path[pathfinding.Step].Y;
+                        pathfinding.Step++;
+                        Debug.WriteLine($"Zombie moved to X: {pos.X} Y: {pos.Y}");
+                    };
+                    
+                    
                     
                     break;
                 }

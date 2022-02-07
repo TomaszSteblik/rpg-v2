@@ -42,7 +42,7 @@ namespace game.GameEngine
 
 
             var collidables = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,3})
-                .Where(x=>((Physics) x.Components[3]).IsCollidable);
+                .Where(x=>((Physics) x.Components[3]).IsCollidable).ToArray();
             
             
             var pX = X;
@@ -50,7 +50,7 @@ namespace game.GameEngine
             
             
             
-            if(!collidables.Any(x=>((Position) x.Components[0]).X == pX+1 && ((Position) x.Components[0]).Y == pY+1))
+            if(!collidables.Any(x=>((Position) x.Components[0]).X == pX+1 && ((Position) x.Components[0]).Y == pY))
                 //if(SourceOfMagic.Map.CanMoveInto(X+1,Y))
                 neighbours.Add(new Node(X+1,Y));
                 

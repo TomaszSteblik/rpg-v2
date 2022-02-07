@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using game.GameEngine.Components;
+using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine
 {
@@ -22,6 +23,7 @@ namespace game.GameEngine
             ComponentsTypes.Add(typeof(Vision));        //4
             ComponentsTypes.Add(typeof(Pathfinding));   //5
             ComponentsTypes.Add(typeof(Health));        //6
+            ComponentsTypes.Add(typeof(Action));        //7
         }
 
         public static ICollection<Entity> QueryEntitiesByComponentsIndexes(int[] componentsIndexes)

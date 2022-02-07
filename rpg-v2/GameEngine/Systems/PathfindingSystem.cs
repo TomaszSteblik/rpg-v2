@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using game.GameEngine.Components;
 
 namespace game.GameEngine.Systems
 {
@@ -8,7 +10,31 @@ namespace game.GameEngine.Systems
     {
         public static void Act()
         {
-            
+            var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,5});
+            foreach (var entity in entities)
+            {
+                var pathfindingComponent = (Pathfinding) entity.Components[5];
+                
+                if(pathfindingComponent.NeedToFindNewPath is false)
+                    continue;
+
+                var position = (Position) entity.Components[0];
+
+                var didFindPath = FindPath(position.X,position.Y,
+                    pathfindingComponent.TargetX,pathfindingComponent.TargetY, 
+                    out var foudPath);
+
+                if (didFindPath is false)
+                {
+                    Debug.WriteLine($"Failed to find path to X: {pathfindingComponent.TargetX} Y: {pathfindingComponent.TargetY}");
+                    continue;
+                }
+                Debug.WriteLine("Succeded to find path");
+                pathfindingComponent.Path = foudPath;
+                pathfindingComponent.Step = 0;
+                pathfindingComponent.NeedToFindNewPath = false;
+
+            }
         }
           
         [Description("Returns distance between two nodes, using pitagoras theorem")]
