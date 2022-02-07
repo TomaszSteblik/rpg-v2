@@ -40,9 +40,8 @@ namespace game.GameEngine.Systems
                 var sprite = entity.Components[1] as Sprite;
 
                 var playerVision = (Vision) MainGame.PlayerEntity.Components[4];
-                //TODO:JUST FOR TESTING THIS IS
-                //if (playerVision.CellsInLightOfSight[position.X][position.Y])
-                if (true)
+                
+                if (playerVision.CellsInLightOfSight[position.X][position.Y])
                 {
                     DrawEntity(spriteBatch,position,sprite,sprite.Color);
                 }
