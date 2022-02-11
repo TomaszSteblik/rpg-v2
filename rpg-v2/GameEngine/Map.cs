@@ -27,13 +27,15 @@ namespace game.GameEngine
             var startingX = MainGame.Random.Next(1, size-1);
             var startingY = MainGame.Random.Next(1, size-1);
             
-            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 2, 4});
+            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 2, 4, 6});
 
             var position = (Position) MainGame.PlayerEntity.Components[0];
             var spriteP = (Sprite) MainGame.PlayerEntity.Components[1];
             var vision = (Vision) MainGame.PlayerEntity.Components[4];
             var physicsPlayer = (Physics) MainGame.PlayerEntity.Components[3];
             var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
+            var playerHealth = (Health) MainGame.PlayerEntity.Components[6];
+            playerHealth.Hp = 30;
             position.X = startingX;
             position.Y = startingY;
             spriteP.Color = Color.White;

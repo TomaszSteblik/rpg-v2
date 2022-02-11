@@ -45,7 +45,6 @@ namespace game.GameEngine.GameStates
                     PathfindingSystem.Act();
 
                     Thread.Sleep(250);
-                    Debug.Write("'asd'");
                 }
                 
             });

@@ -2,7 +2,9 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using game.GameEngine.Components;
+using game.GameEngine.Systems.Helpers;
 using Microsoft.Xna.Framework;
+using rpg_v2;
 using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine.GameObjects.Npcs;
@@ -40,6 +42,8 @@ public class Zombie
 
         var pathfinding = (Pathfinding) zombie.Components[5];
         var action = (Action) zombie.Components[7];
+        var vision = (Vision) zombie.Components[4];
+        vision.Sight = 5;
 
         pathfinding.NeedToFindNewPath = true;
         
@@ -48,45 +52,66 @@ public class Zombie
         pathfinding.TargetX = randomPositionTarget.X;
         pathfinding.TargetY = randomPositionTarget.Y;
         
-        const int delay = 3;
+        var delay = MainGame.Random.Next(1,3);
+        var meleeDamageZombie = 4;
         var delayStep = 0;
         //TODO:ATTACK PLAYER WHEN COLLIDING WITH HIM
         action.EntityAction = () =>
         {
             if (delayStep >= delay)
             {
+                var playerPosition = (Position) MainGame.PlayerEntity.Components[0];
+                var isPlayerVisible = VisionHelpers.IsPositionInFov(vision, playerPosition);
+                
                 if (pathfinding.Step >= pathfinding.Path.Count)
                 {
                     pathfinding.NeedToFindNewPath = true;
                 
                     var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
 
-                    pathfinding.TargetX = randomPositionTargetLambda.X;
-                    pathfinding.TargetY = randomPositionTargetLambda.Y;
-
+                    pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
+                    pathfinding.TargetY = isPlayerVisible ? playerPosition.Y :randomPositionTargetLambda.Y;
                     return;
                 }
 
                 if (Map.IsPositionOccupiedByCollidableEntity(pathfinding.Path[pathfinding.Step].X,
                         pathfinding.Path[pathfinding.Step].Y) is false)
                 {
+                    if (isPlayerVisible)
+                    {
+                        pathfinding.NeedToFindNewPath = true;
+
+
+                        pathfinding.TargetX = playerPosition.X;
+                        pathfinding.TargetY = playerPosition.Y;
+                    }
+                    
                     pos.X = pathfinding.Path[pathfinding.Step].X;
                     pos.Y = pathfinding.Path[pathfinding.Step].Y;
                     pathfinding.Step++;
-                    Debug.WriteLine($"Zombie moved to X: {pos.X} Y: {pos.Y}");
+                    
+                    
                 }
                 else
                 {
-                    pathfinding.NeedToFindNewPath = true;
+                    if (pathfinding.Path[pathfinding.Step].X == playerPosition.X &&
+                        pathfinding.Path[pathfinding.Step].Y == playerPosition.Y)
+                    {
+                        var playerHealth = (Health) MainGame.PlayerEntity.Components[6];
+                        playerHealth.Hp -= meleeDamageZombie;
+                        Debug.WriteLine("player dmged");
+                    }
+                    else
+                    {
+                        pathfinding.NeedToFindNewPath = true;
                 
-                    var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
+                        var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
 
-                    pathfinding.TargetX = randomPositionTargetLambda.X;
-                    pathfinding.TargetY = randomPositionTargetLambda.Y;
-
-                    return;
+                        pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
+                        pathfinding.TargetY = isPlayerVisible ? playerPosition.Y :randomPositionTargetLambda.Y;
+                    }
                 }
-                
+
                 delayStep = 0;
             }
             else

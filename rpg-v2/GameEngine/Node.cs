@@ -42,9 +42,10 @@ namespace game.GameEngine
 
 
             var collidables = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,3})
-                .Where(x=>((Physics) x.Components[3]).IsCollidable).ToArray();
-            
-            
+                .Where(x=>((Physics) x.Components[3]).IsCollidable).ToList();
+
+            collidables.Remove(MainGame.PlayerEntity);
+
             var pX = X;
             var pY = Y;
             
