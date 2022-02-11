@@ -1,7 +1,7 @@
 ﻿namespace game.GameEngine.Components
 {
-    public class PlayerData
+    public class PlayerData : Component
     {
-        
+        public int MeleeDamage { get; set; }
     }
 }

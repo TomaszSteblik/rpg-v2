@@ -18,12 +18,26 @@ namespace game.GameEngine.Systems
             {
                 var collidables = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,3})
                     .Where(x=>((Physics) x.Components[3]).IsCollidable);
-                
-                if(!collidables.Any(x=>((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X-1 
-                                       && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y))
+
+                var collidablesAtPosition = collidables.Where(x =>
+                    ((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X - 1
+                    && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y).ToArray();
+
+                if (!collidablesAtPosition.Any())
+                {
                     ((Position) MainGame.PlayerEntity.Components[0]).X--;
+                    return;
+                }
+                
+                var collidablesAtPositionHittable = collidablesAtPosition.Where(x => x.Mask[6]);
+
+                foreach (var entity in collidablesAtPositionHittable)
+                {
+                    var enemyHealth = (Health) entity.Components[6];
+                    var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
+                    enemyHealth.Hp -= playerData.MeleeDamage;
+                }
                     
-                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
             },true);
             
             
@@ -32,11 +46,24 @@ namespace game.GameEngine.Systems
                 var collidables = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,3})
                     .Where(x=>((Physics) x.Components[3]).IsCollidable);
                 
-                if(!collidables.Any(x=>((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X 
-                                       && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y-1))
+                var collidablesAtPosition = collidables.Where(x=>
+                    ((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X 
+                    && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y-1).ToArray();
+
+                if (!collidablesAtPosition.Any())
+                {
                     ((Position) MainGame.PlayerEntity.Components[0]).Y--;
+                    return;
+                }
           
-                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+                var collidablesAtPositionHittable = collidablesAtPosition.Where(x => x.Mask[6]);
+
+                foreach (var entity in collidablesAtPositionHittable)
+                {
+                    var enemyHealth = (Health) entity.Components[6];
+                    var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
+                    enemyHealth.Hp -= playerData.MeleeDamage;
+                }
                 
             },true);
             
@@ -45,13 +72,25 @@ namespace game.GameEngine.Systems
             {
                 var collidables = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,3})
                     .Where(x=>((Physics) x.Components[3]).IsCollidable);
+
+                var collidablesAtPosition = collidables.Where(x =>
+                    ((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X + 1
+                    && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y).ToArray();
+
+                if (!collidablesAtPosition.Any())
+                {
+                    ((Position) MainGame.PlayerEntity.Components[0]).X++;
+                    return;
+                }
                 
-                if(!collidables.Any(x=>((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X+1 
-                                       && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y))
-                ((Position) MainGame.PlayerEntity.Components[0]).X++;
-                
-            
-                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+                var collidablesAtPositionHittable = collidablesAtPosition.Where(x => x.Mask[6]);
+
+                foreach (var entity in collidablesAtPositionHittable)
+                {
+                    var enemyHealth = (Health) entity.Components[6];
+                    var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
+                    enemyHealth.Hp -= playerData.MeleeDamage;
+                }
                 
             },true);
             
@@ -60,12 +99,26 @@ namespace game.GameEngine.Systems
             {
                 var collidables = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,3})
                     .Where(x=>((Physics) x.Components[3]).IsCollidable);
-                
-                if(!collidables.Any(x=>((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X
-                                       && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y+1))
+
+                var collidablesAtPosition = collidables.Where(x =>
+                    ((Position) x.Components[0]).X == ((Position) MainGame.PlayerEntity.Components[0]).X
+                    && ((Position) x.Components[0]).Y == ((Position) MainGame.PlayerEntity.Components[0]).Y + 1).ToArray();
+
+                if (!collidablesAtPosition.Any())
+                {
                     ((Position) MainGame.PlayerEntity.Components[0]).Y++;
-            
-                Debug.WriteLine($"Player position: x: {((Position) MainGame.PlayerEntity.Components[0]).X} y: {((Position) MainGame.PlayerEntity.Components[0]).Y}");
+                    return;
+                }
+                    
+                var collidablesAtPositionHittable = collidablesAtPosition.Where(x => x.Mask[6]);
+
+                foreach (var entity in collidablesAtPositionHittable)
+                {
+                    var enemyHealth = (Health) entity.Components[6];
+                    var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
+                    enemyHealth.Hp -= playerData.MeleeDamage;
+                }
+                
             },true);
             
             InputManager.StartTrackingKey(Keys.S, () =>

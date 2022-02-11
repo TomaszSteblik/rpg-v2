@@ -33,6 +33,7 @@ namespace game.GameEngine
             var spriteP = (Sprite) MainGame.PlayerEntity.Components[1];
             var vision = (Vision) MainGame.PlayerEntity.Components[4];
             var physicsPlayer = (Physics) MainGame.PlayerEntity.Components[3];
+            var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
             position.X = startingX;
             position.Y = startingY;
             spriteP.Color = Color.White;
@@ -41,6 +42,7 @@ namespace game.GameEngine
             spriteP.Layer = 1;
             vision.Sight = 10;
             physicsPlayer.IsCollidable = true;
+            playerData.MeleeDamage = 4;
 
             var currentColumn = startingX;
             var currentRow = startingY;
