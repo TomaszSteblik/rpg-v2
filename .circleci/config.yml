@@ -19,7 +19,7 @@ jobs:
       - store_test_results:
           path: rpg-v2_tests/TestResults/TestResults.trx
 
-  setup-env:
+  build-mac:
 
     executor: net-executor3
     steps:
@@ -32,11 +32,6 @@ jobs:
           apt-get install -y apt-transport-https && \
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
-
-  build-mac:
-
-    executor: net-executor3
-    steps:
       - checkout
       - run: |
           dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
@@ -45,6 +40,15 @@ jobs:
 
     executor: net-executor3
     steps:
+      - run: |
+          wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      - run : |
+          dpkg -i packages-microsoft-prod.deb
+      - run : |
+          apt-get update; \
+          apt-get install -y apt-transport-https && \
+          apt-get update && \
+          apt-get install -y dotnet-sdk-6.0
       - checkout
       - run: |
           dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
@@ -54,6 +58,15 @@ jobs:
 
     executor: net-executor3
     steps:
+      - run: |
+          wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      - run : |
+          dpkg -i packages-microsoft-prod.deb
+      - run : |
+          apt-get update; \
+          apt-get install -y apt-transport-https && \
+          apt-get update && \
+          apt-get install -y dotnet-sdk-6.0
       - checkout
       - run: |
           dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
@@ -64,13 +77,12 @@ workflows:
   my-custom-workflow:
     jobs:
       - tests
-      - setup-env
       - build-mac:
           requires:
-            - setup-env
+            - tests
       - build-linux:
           requires:
-            - setup-env
+            - tests
       - build-win:
           requires:
-            - setup-env
+            - tests
