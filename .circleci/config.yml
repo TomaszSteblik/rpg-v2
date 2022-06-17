@@ -1,0 +1,164 @@
+version: 2.1
+executors:
+  net-executor6:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk
+
+  net-executor3:
+    docker:
+      - image : mcr.microsoft.com/dotnet/sdk:3.1-bullseye
+    working_directory: /projects/rpg-v2
+
+jobs:
+  tests:
+
+    executor: net-executor6
+    steps:
+      - checkout
+      - run: |
+          dotnet test --logger 'trx;LogFileName=TestResults.trx'
+      - store_test_results:
+          path: rpg-v2_tests/TestResults/TestResults.trx
+
+  build-mac:
+
+    executor: net-executor3
+    steps:
+      - checkout
+      - run: mkdir -p workspace
+      - run: |
+          wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      - run : |
+          dpkg -i packages-microsoft-prod.deb
+      - run : |
+          apt-get update; \
+          apt-get install -y apt-transport-https && \
+          apt-get update && \
+          apt-get install -y dotnet-sdk-6.0
+      - run: |
+          dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - mac-output
+
+
+  build-win:
+
+    executor: net-executor3
+    steps:
+      - checkout
+      - run: mkdir -p workspace
+      - run: |
+          wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      - run : |
+          dpkg -i packages-microsoft-prod.deb
+      - run : |
+          apt-get update; \
+          apt-get install -y apt-transport-https && \
+          apt-get update && \
+          apt-get install -y dotnet-sdk-6.0
+      - run: |
+          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release -o workspace/win-output rpg-v2/rpg-v2.csproj
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - win-output
+
+  build-linux:
+
+    executor: net-executor3
+    steps:
+      - checkout
+      - run: mkdir -p workspace
+      - run: |
+          wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      - run : |
+          dpkg -i packages-microsoft-prod.deb
+      - run : |
+          apt-get update; \
+          apt-get install -y apt-transport-https && \
+          apt-get update && \
+          apt-get install -y dotnet-sdk-6.0
+      - run: |
+          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release -o workspace/linux-output rpg-v2/rpg-v2.csproj
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - linux-output
+  zip-publish:
+
+    executor: net-executor3
+    steps:
+      - attach_workspace:
+          at: /projects/rpg-v2
+      - run: |
+          apt-get update; \
+          apt-get install -y zip
+      - run: |
+          zip -r linux.zip linux-output
+      - run: |
+          zip -r mac.zip mac-output
+      - run: |
+          zip -r win.zip win-output
+      - run: |
+          rm -r linux-output
+      - run: |
+          rm -r mac-output
+      - run: |
+          rm -r win-output
+      - persist_to_workspace:
+          root: /projects/rpg-v2
+          paths:
+            - win.zip
+            - mac.zip
+            - linux.zip
+
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    working_directory: /projects
+    steps:
+      - attach_workspace:
+          at: /projects/rpg-v2
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
+            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
+  
+workflows:
+  commit:
+    jobs:
+      - tests
+
+  weekly:
+    triggers: #use the triggers key to indicate a scheduled build
+      - schedule:
+          cron: "0 12 * * 1" # use cron syntax to set the schedule
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - tests
+      - build-mac:
+          requires:
+            - tests
+      - build-linux:
+          requires:
+            - tests
+      - build-win:
+          requires:
+            - tests
+      - zip-publish:
+          requires:
+            - build-mac
+            - build-win
+            - build-linux
+      - publish-github-release:
+          context: GITHUB_CREDS
+          requires:
+              - zip-publish
+
+      
