@@ -23,6 +23,7 @@ jobs:
 
     executor: net-executor3
     steps:
+      - checkout
       - run: |
           wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - run : |
@@ -32,7 +33,6 @@ jobs:
           apt-get install -y apt-transport-https && \
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
-      - checkout
       - run: |
           dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
 
@@ -40,6 +40,7 @@ jobs:
 
     executor: net-executor3
     steps:
+      - checkout
       - run: |
           wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - run : |
@@ -49,7 +50,6 @@ jobs:
           apt-get install -y apt-transport-https && \
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
-      - checkout
       - run: |
           dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
   
@@ -58,6 +58,7 @@ jobs:
 
     executor: net-executor3
     steps:
+      - checkout
       - run: |
           wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - run : |
@@ -67,7 +68,6 @@ jobs:
           apt-get install -y apt-transport-https && \
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
-      - checkout
       - run: |
           dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
 
