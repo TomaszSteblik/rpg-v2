@@ -131,6 +131,8 @@ jobs:
             echo $VERSION
             echo $GITHUB_TOKEN
             echo $CIRCLE_PROJECT_USERNAME
+            echo $CIRCLE_PROJECT_REPONAME
+            echo $CIRCLE_SHA1
             ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
   
 workflows:
@@ -152,6 +154,7 @@ workflows:
             - build-win
             - build-linux
       - publish-github-release:
+          context: GITHUB_CREDS
           requires:
               - zip-publish
 
