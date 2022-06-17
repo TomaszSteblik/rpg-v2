@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run: |
-          dotnet test
+          dotnet test -l trx
       - store_test_results:
           path: rpg-v2_tests/TestResults
 
