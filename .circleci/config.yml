@@ -128,7 +128,9 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
-            echo ${VERSION}
+            echo $VERSION
+            echo $GITHUB_TOKEN
+            echo $CIRCLE_PROJECT_USERNAME
             ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
   
 workflows:
