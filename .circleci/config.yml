@@ -101,6 +101,29 @@ jobs:
           zip -r mac.zip mac-output
       - run: |
           zip -r win.zip win-output
+      - run: |
+          rm -r linux-output
+      - run: |
+          rm -r mac-output
+      - run: |
+          rm -r win-output
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - /projects/rpg-v2
+            
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: /projects/rpg-v2
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            VERSION=$(my-binary --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /projects/rpg-v2
+  
 
 workflows:
   release-workflow:
