@@ -1,12 +1,17 @@
 version: 2.1
 executors:
-  net-executor:
+  net-executor6:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk
+
+  net-executor3:
+    docker:
+      - image : mcr.microsoft.com/dotnet/sdk:3.1-bullseye
+
 jobs:
   tests:
 
-    executor: net-executor
+    executor: net-executor6
     steps:
       - checkout
       - run: |
@@ -16,30 +21,28 @@ jobs:
 
   build-mac:
 
-    executor: net-executor
+    executor: net-executor3
     steps:
       - checkout
       - run: |
-          dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release
+          dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
 
   build-win:
 
-    executor: net-executor
+    executor: net-executor3
     steps:
       - checkout
       - run: |
-          dotnet --version
-      - run: |
-          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release
+          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
   
 
   build-linux:
 
-    executor: net-executor
+    executor: net-executor3
     steps:
       - checkout
       - run: |
-          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release 
+          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
 
 workflows:
   my-custom-workflow:
