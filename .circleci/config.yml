@@ -129,7 +129,7 @@ jobs:
           command: |
             VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
             echo ${VERSION}
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./rpg-v2/
+            ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
   
 workflows:
   release-workflow:
