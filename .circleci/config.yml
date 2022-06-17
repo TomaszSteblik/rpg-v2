@@ -59,7 +59,7 @@ jobs:
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
       - run: |
-          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release -o workspace/win-output rpg-v2/rpg-v2.csproj
       - persist_to_workspace:
           root: workspace
           paths:
@@ -81,11 +81,11 @@ jobs:
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
       - run: |
-          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release -o workspace/linux-output rpg-v2/rpg-v2.csproj
       - persist_to_workspace:
           root: workspace
           paths:
-            - win-output
+            - linux-output
   zip-publish:
 
     executor: net-executor3
