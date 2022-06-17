@@ -110,8 +110,10 @@ jobs:
       - persist_to_workspace:
           root: workspace
           paths:
-            - /projects/rpg-v2
-            
+            - win.zip
+            - mac.zip
+            - linux.zip
+
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
@@ -143,3 +145,6 @@ workflows:
             - build-mac
             - build-win
             - build-linux
+      - publish-github-release:
+          requires:
+            - zip-publish
