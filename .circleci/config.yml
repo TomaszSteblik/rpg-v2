@@ -126,7 +126,7 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            VERSION=$(my-binary --version)
+            VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /projects/rpg-v2
   
   
@@ -149,10 +149,8 @@ workflows:
             - build-mac
             - build-win
             - build-linux
-      - gh/release:
-          tag: 1.0.0
+      - publish-github-release:
           requires:
-            - zip-publish
-          context:
-            - GITHUB_CREDS
+              - zip-publish
+
       
