@@ -108,7 +108,7 @@ jobs:
       - run: |
           rm -r win-output
       - persist_to_workspace:
-          root: workspace
+          root: /projects/rpg-v2
           paths:
             - win.zip
             - mac.zip
