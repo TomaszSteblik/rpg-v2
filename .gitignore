@@ -3,3 +3,8 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+rpg-v2/bin/
+rpg-v2/obj/
+rpg-v2_tests/bin/
+rpg-v2_tests/obj/
+rpg-v2_tests/TestResults/
