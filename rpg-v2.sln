@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rpg-v2", "rpg-v2\rpg-v2.csproj", "{B5663260-A82A-4DF0-B7A7-B32DF6963064}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rpg-v2_tests", "rpg-v2_tests\rpg-v2_tests.csproj", "{00145537-42FF-44E1-8A6A-34CBD3D99EF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{B5663260-A82A-4DF0-B7A7-B32DF6963064}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5663260-A82A-4DF0-B7A7-B32DF6963064}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5663260-A82A-4DF0-B7A7-B32DF6963064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00145537-42FF-44E1-8A6A-34CBD3D99EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00145537-42FF-44E1-8A6A-34CBD3D99EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00145537-42FF-44E1-8A6A-34CBD3D99EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00145537-42FF-44E1-8A6A-34CBD3D99EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
