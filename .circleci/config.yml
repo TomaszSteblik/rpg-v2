@@ -74,7 +74,7 @@ jobs:
 
 
 workflows:
-  my-custom-workflow:
+  release-workflow:
     jobs:
       - tests
       - build-mac:
