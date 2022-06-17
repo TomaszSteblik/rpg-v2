@@ -7,6 +7,8 @@
         <TieredCompilation>false</TieredCompilation>
         <LangVersion>10</LangVersion>
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <DebugType>embedded</DebugType>
+        <SelfContained>true</SelfContained>
     </PropertyGroup>
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
