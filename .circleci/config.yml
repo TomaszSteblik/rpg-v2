@@ -1,7 +1,4 @@
 version: 2.1
-orbs:
-    node: circleci/node@4.3
-    gh: circleci/github-cli@1.0
 executors:
   net-executor6:
     docker:
@@ -128,15 +125,21 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
-            echo $VERSION
-            echo $GITHUB_TOKEN
-            echo $CIRCLE_PROJECT_USERNAME
-            echo $CIRCLE_PROJECT_REPONAME
-            echo $CIRCLE_SHA1
             ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
   
 workflows:
-  release-workflow:
+  commit:
+    jobs:
+      - tests
+
+  weekly:
+    triggers: #use the triggers key to indicate a scheduled build
+      - schedule:
+          cron: "0 12 * * 1" # use cron syntax to set the schedule
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - tests
       - build-mac:
