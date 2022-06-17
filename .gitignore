@@ -10,3 +10,5 @@ rpg-v2_tests/obj/
 rpg-v2_tests/TestResults/
 .DS_Store
 rpg-v2/.DS_Store
+.mgstats
+.idea/
