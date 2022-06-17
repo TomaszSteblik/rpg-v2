@@ -44,5 +44,3 @@ workflows:
     jobs:
       - tests
       - build-mac
-      - build-win
-      - build-linux
