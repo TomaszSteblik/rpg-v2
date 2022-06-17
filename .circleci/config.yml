@@ -65,6 +65,12 @@ workflows:
     jobs:
       - tests
       - setup-env
-      - build-mac
-      - build-win
-      - build-linux
+      - build-mac:
+          requires:
+            - setup-env
+      - build-linux:
+          requires:
+            - setup-env
+      - build-win:
+          requires:
+            - setup-env
