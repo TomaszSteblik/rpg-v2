@@ -1,4 +1,7 @@
 version: 2.1
+orbs:
+    node: circleci/node@4.3
+    gh: circleci/github-cli@1.0
 executors:
   net-executor6:
     docker:
@@ -126,6 +129,7 @@ jobs:
             VERSION=$(my-binary --version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /projects/rpg-v2
   
+  
 
 workflows:
   release-workflow:
@@ -145,6 +149,10 @@ workflows:
             - build-mac
             - build-win
             - build-linux
-      - publish-github-release:
+      - gh/release:
+          tag: 1.0.0
           requires:
             - zip-publish
+          context:
+            - GITHUB_CREDS
+      
