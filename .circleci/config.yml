@@ -10,9 +10,9 @@ jobs:
     steps:
       - checkout
       - run: |
-          dotnet test -l trx
+          dotnet test -l trx;LogFileName=<TestResults.trx>
       - store_test_results:
-          path: rpg-v2_tests/TestResults
+          path: rpg-v2_tests/TestResults/TestResults.trx
 
 workflows:
   my-custom-workflow:
