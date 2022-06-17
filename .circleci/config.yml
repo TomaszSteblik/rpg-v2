@@ -11,6 +11,8 @@ jobs:
       - checkout
       - run: |
           # dotnet test
+      - store_test_results:
+          path: ./
 
 workflows:
   my-custom-workflow:
