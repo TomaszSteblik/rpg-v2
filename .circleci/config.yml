@@ -93,7 +93,14 @@ jobs:
       - attach_workspace:
           at: /projects/rpg-v2
       - run: |
-          ls
+          apt-get update; \
+          apt-get install -y zip
+      - run: |
+          zip -r linux.zip linux-output
+      - run: |
+          zip -r mac.zip mac-output
+      - run: |
+          zip -r win.zip win-output
 
 workflows:
   release-workflow:
