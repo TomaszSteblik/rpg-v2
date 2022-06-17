@@ -28,6 +28,8 @@ jobs:
     steps:
       - checkout
       - run: |
+          dotnet --version
+      - run: |
           dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release
   
 
