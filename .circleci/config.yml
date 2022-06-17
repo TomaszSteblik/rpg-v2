@@ -7,6 +7,7 @@ executors:
   net-executor3:
     docker:
       - image : mcr.microsoft.com/dotnet/sdk:3.1-bullseye
+    working_directory: /tmp
 
 jobs:
   tests:
@@ -24,6 +25,7 @@ jobs:
     executor: net-executor3
     steps:
       - checkout
+      - run: mkdir -p workspace
       - run: |
           wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - run : |
@@ -34,13 +36,19 @@ jobs:
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
       - run: |
-          dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - mac-output
+
 
   build-win:
 
     executor: net-executor3
     steps:
       - checkout
+      - run: mkdir -p workspace
       - run: |
           wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - run : |
@@ -51,14 +59,18 @@ jobs:
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
       - run: |
-          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
-  
+          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - win-output
 
   build-linux:
 
     executor: net-executor3
     steps:
       - checkout
+      - run: mkdir -p workspace
       - run: |
           wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
       - run : |
@@ -69,9 +81,19 @@ jobs:
           apt-get update && \
           apt-get install -y dotnet-sdk-6.0
       - run: |
-          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - win-output
+  zip-publish:
 
-
+    executor: net-executor3
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: |
+          #echo "hello world"
 
 workflows:
   release-workflow:
@@ -86,3 +108,8 @@ workflows:
       - build-win:
           requires:
             - tests
+      - zip-publish:
+          requires:
+            - build-mac
+            - build-win
+            - build-linux
