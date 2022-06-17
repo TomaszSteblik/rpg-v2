@@ -12,7 +12,7 @@ jobs:
       - run: |
           # dotnet test
       - store_test_results:
-          path: /home/circleci/project/rpg-v2/rpg-v2_tests/TestResults
+          path: rpg-v2_tests/TestResults
 
 workflows:
   my-custom-workflow:
