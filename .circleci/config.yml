@@ -126,6 +126,7 @@ jobs:
           command: |
             VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
             ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
+
   analyse-code:
     executor: net-executor3
     steps:
@@ -136,7 +137,7 @@ jobs:
           apt update -y
           apt install openjdk-17-jdk -y
           dotnet sonarscanner begin /k:"TomaszSteblik_rpg-v2" /o:"tomaszsteblik" /d:sonar.login="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build ~/project/rpg-v2.sln
+          dotnet build /projects/rpg-v2/rpg-v2.sln
           dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
       
 workflows:
