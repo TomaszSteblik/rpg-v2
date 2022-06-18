@@ -126,11 +126,22 @@ jobs:
           command: |
             VERSION="$(date +"%Y.%m.%d").${CIRCLE_BUILD_NUM}"
             ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
-  
+  analyse-code:
+    docker:
+      - image: cimg/openjdk:18.0.1
+    steps:
+      - checkout
+      - sonarcloud/scan
+
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.0.3 
+
 workflows:
   commit:
     jobs:
       - tests
+      - analyse-code:
+          context: SONAR
 
   weekly:
     triggers: #use the triggers key to indicate a scheduled build
