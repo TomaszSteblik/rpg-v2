@@ -128,14 +128,18 @@ jobs:
             ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./rpg-v2/
   analyse-code:
     docker:
-      - image: cimg/openjdk:18.0.1
+      - image: mcr.microsoft.com/dotnet/sdk
     steps:
       - checkout
-      - sonarcloud/scan
-
-orbs:
-  sonarcloud: sonarsource/sonarcloud@1.0.3 
-
+      - run: |
+          dotnet tool install --global dotnet-sonarscanner
+          export PATH="$PATH:/root/.dotnet/tools"
+          apt update -y
+          apt install openjdk-17-jdk -y
+          dotnet sonarscanner begin /k:"TomaszSteblik_rpg-v2" /o:"tomaszsteblik" /d:sonar.login="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet build ~/project/rpg-v2.sln
+          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+      
 workflows:
   commit:
     jobs:
