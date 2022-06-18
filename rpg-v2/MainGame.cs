@@ -45,7 +45,6 @@ namespace rpg_v2
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             _graphics.PreferredBackBufferWidth = 960;
             _graphics.PreferredBackBufferHeight = 960;
             
