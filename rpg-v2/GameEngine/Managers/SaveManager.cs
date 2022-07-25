@@ -11,11 +11,8 @@ using CompressionMode = System.IO.Compression.CompressionMode;
 
 namespace game.GameEngine
 {
-    public class SaveManager 
+    public static class SaveManager 
     {
-        //TODO: Make system to save multiple saves /change names, load different save etc.
-        private const string SaveFileGzip = "savefile.gz";
-        
         public static void SaveGame(string path)
         {
             var serialized = SerializeEntitiesToJson();
