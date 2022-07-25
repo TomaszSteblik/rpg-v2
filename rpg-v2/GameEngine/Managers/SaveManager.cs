@@ -22,7 +22,7 @@ namespace game.GameEngine
         private static void CompressAndSaveJsonToGzip(string serialized, string path)
         {
             if (string.IsNullOrWhiteSpace(path))
-                throw new Exception("Empty save dir path");
+                throw new ArgumentException("Empty save dir path");
             
             if (File.Exists(path))
                 File.Delete(path);

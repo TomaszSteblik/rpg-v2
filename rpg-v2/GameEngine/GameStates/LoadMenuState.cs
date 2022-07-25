@@ -21,8 +21,8 @@ public class LoadMenuState : IGameState
         {
             var saveFile = _saveFiles[index];
             yPosition += 42;
-            spriteBatch.DrawString(font, saveFile.Split('/', '\\').Last(), new Vector2(xPosition, yPosition),
-                _selectPosition == index ? Color.Blue : Color.White);
+            spriteBatch.DrawString(font, saveFile.Split(new []{'/', '\\'},StringSplitOptions.None).Last(),
+                new Vector2(xPosition, yPosition), _selectPosition == index ? Color.Blue : Color.White);
         }
     }
 
@@ -44,63 +44,46 @@ public class LoadMenuState : IGameState
 
         _saveFiles = Directory.GetFiles(saveFolderPath);
         
-        _inputManager.StartTrackingKey(Keys.Up, () =>
-        {
-            if (_selectPosition < 0)
-            {
-                _selectPosition = _saveFiles.Length;
-            }
-            else
-            {
-                _selectPosition--;
-            }
-        },true);
+        _inputManager.StartTrackingKey(Keys.Up, MoveSelectUp,true);
         
-        _inputManager.StartTrackingKey(Keys.Down, () =>
-        {
-            if (_selectPosition >= _saveFiles.Length)
-            {
-                _selectPosition = 0;
-            }
-            else
-            {
-                _selectPosition++;
-            }
-        },true);
+        _inputManager.StartTrackingKey(Keys.Down, MoveSelectDown,true);
         
-        _inputManager.StartTrackingKey(Keys.W, () =>
-        {
-            if (_selectPosition < 0)
-            {
-                _selectPosition = _saveFiles.Length;
-            }
-            else
-            {
-                _selectPosition--;
-            }
-        },true);
+        _inputManager.StartTrackingKey(Keys.W, MoveSelectUp,true);
         
-        _inputManager.StartTrackingKey(Keys.S, () =>
-        {
-            if (_selectPosition >= _saveFiles.Length)
-            {
-                _selectPosition = 0;
-            }
-            else
-            {
-                _selectPosition++;
-            }
-        },true);
+        _inputManager.StartTrackingKey(Keys.S, MoveSelectDown,true);
         
-        _inputManager.StartTrackingKey(Keys.Enter, () =>
-        {
-            SaveManager.LoadGame(_saveFiles[_selectPosition]);
-            MainGame.CurrentGameState = new MapGameState();
-        },false);
+        _inputManager.StartTrackingKey(Keys.Enter, ConfirmSelection);
         
-        _inputManager.StartTrackingKey(Keys.Escape, () =>
+        _inputManager.StartTrackingKey(Keys.Escape, () => MainGame.CurrentGameState = new MapGameState());
+    }
+
+    private void ConfirmSelection()
+    {
+        SaveManager.LoadGame(_saveFiles[_selectPosition]);
+        MainGame.CurrentGameState = new MapGameState();
+    }
+
+    private void MoveSelectDown()
+    {
+        if (_selectPosition >= _saveFiles.Length)
         {
-            MainGame.CurrentGameState = new MapGameState();
-        },false);
+            _selectPosition = 0;
+        }
+        else
+        {
+            _selectPosition++;
+        }
+    }
+
+    private void MoveSelectUp()
+    {
+        if (_selectPosition < 0)
+        {
+            _selectPosition = _saveFiles.Length;
+        }
+        else
+        {
+            _selectPosition--;
+        }
     }
 }
