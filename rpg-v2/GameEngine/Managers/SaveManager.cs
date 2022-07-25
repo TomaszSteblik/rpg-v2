@@ -17,7 +17,6 @@ namespace game.GameEngine
         {
             var serialized = SerializeEntitiesToJson();
             CompressAndSaveJsonToGzip(serialized, path);
-            GC.Collect();
         }
 
         private static void CompressAndSaveJsonToGzip(string serialized, string path)
@@ -49,7 +48,6 @@ namespace game.GameEngine
             var json = ReadJsonFromGzip(saveFile);
             var entities = DeserializeEntitiesFromJson(json);
             LoadEntitiesAndPlayer(entities);
-            GC.Collect();
         }
 
         private static string ReadJsonFromGzip(string saveFile)
