@@ -53,8 +53,6 @@ namespace rpg_v2
             _graphics.ApplyChanges();
             EcsManager.Init();
             SoundManager.Init(Content);
-
-            Window.TextInput += (sender, args) => { };
             
             CurrentGameState = new StartMenuGameState();
             
