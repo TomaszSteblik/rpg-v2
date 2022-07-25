@@ -96,8 +96,7 @@ namespace game.GameEngine.GameStates
                         MainGame.CurrentGameState = new MapGameState();
                         break;
                     case 2:
-                        SaveManager.LoadGame();
-                        MainGame.CurrentGameState = new MapGameState();
+                        MainGame.CurrentGameState = new LoadMenuState();
                         break;
                     case 5:
                         Program.Game.Exit();

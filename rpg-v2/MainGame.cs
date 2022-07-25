@@ -31,6 +31,8 @@ namespace rpg_v2
 
         private double frameRate =0;
 
+        public static GameWindow GameWindow;
+        
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,11 +53,14 @@ namespace rpg_v2
             _graphics.ApplyChanges();
             EcsManager.Init();
             SoundManager.Init(Content);
+
+            Window.TextInput += (sender, args) => { };
             
             CurrentGameState = new StartMenuGameState();
+            GameWindow = Window;
             
             SoundManager.Play();
-
+            
             base.Initialize();
         }
 
