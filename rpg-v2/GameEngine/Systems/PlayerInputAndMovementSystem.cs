@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using game.GameEngine.Components;
+using game.GameEngine.GameStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using rpg_v2;
@@ -124,8 +125,7 @@ namespace game.GameEngine.Systems
             
             InputManager.StartTrackingKey(Keys.S,  () =>
             {
-                //TODO:create saving system
-                SaveManager.SaveGame();
+                MainGame.CurrentGameState = new SaveMenuState();
             });
         }
 

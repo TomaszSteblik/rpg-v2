@@ -29,15 +29,17 @@ namespace rpg_v2
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private double frameRate =0;
+        private double _frameRate =0;
 
+        public static GameWindow GameWindow { get; private set; }
+        
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            
-            
+            GameWindow = Window;
+
             _graphics.SynchronizeWithVerticalRetrace = false;
             this.IsFixedTimeStep = false;
         }
@@ -51,11 +53,13 @@ namespace rpg_v2
             _graphics.ApplyChanges();
             EcsManager.Init();
             SoundManager.Init(Content);
+
+            Window.TextInput += (sender, args) => { };
             
             CurrentGameState = new StartMenuGameState();
             
             SoundManager.Play();
-
+            
             base.Initialize();
         }
 
@@ -73,7 +77,7 @@ namespace rpg_v2
         {
             CurrentGameState.Update(gameTime);
             
-            frameRate=1 / gameTime.ElapsedGameTime.TotalSeconds;
+            _frameRate=1 / gameTime.ElapsedGameTime.TotalSeconds;
 
             
             base.Update(gameTime);
@@ -87,7 +91,7 @@ namespace rpg_v2
             CurrentGameState.Draw(_spriteBatch);
 
             SpriteFontBase font18 = FontSystem.GetFont(18);
-            _spriteBatch.DrawString(font18, $"{frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
+            _spriteBatch.DrawString(font18, $"{_frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(font18, $"{(GC.GetTotalMemory(false)/1000000.0):F2}  MB", new Vector2(0, 18), Color.White);
 
 

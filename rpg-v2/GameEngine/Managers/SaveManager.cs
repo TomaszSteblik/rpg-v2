@@ -11,23 +11,23 @@ using CompressionMode = System.IO.Compression.CompressionMode;
 
 namespace game.GameEngine
 {
-    public class SaveManager 
+    public static class SaveManager 
     {
-        //TODO: Make system to save multiple saves /change names, load different save etc.
-        private const string SaveFileGzip = "savefile.gz";
-
-        public static void SaveGame()
+        public static void SaveGame(string path)
         {
             var serialized = SerializeEntitiesToJson();
-            CompressAndSaveJsonToGzip(serialized);
-            GC.Collect();
+            CompressAndSaveJsonToGzip(serialized, path);
         }
 
-        private static void CompressAndSaveJsonToGzip(string serialized)
+        private static void CompressAndSaveJsonToGzip(string serialized, string path)
         {
-            if (File.Exists(SaveFileGzip))
-                File.Delete(SaveFileGzip);
-            using var compressedFileStream = File.Create(SaveFileGzip);
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Empty save dir path");
+            
+            if (File.Exists(path))
+                File.Delete(path);
+            
+            using var compressedFileStream = File.Create(path);
             using var compressor = new GZipStream(compressedFileStream, CompressionMode.Compress);
             compressor.Write(Encoding.UTF8.GetBytes(serialized));
             compressor.Flush();
@@ -43,17 +43,16 @@ namespace game.GameEngine
             return serialized;
         }
 
-        public static void LoadGame()
+        public static void LoadGame(string saveFile)
         {
-            var json = ReadJsonFromGzip();
+            var json = ReadJsonFromGzip(saveFile);
             var entities = DeserializeEntitiesFromJson(json);
             LoadEntitiesAndPlayer(entities);
-            GC.Collect();
         }
 
-        private static string ReadJsonFromGzip()
+        private static string ReadJsonFromGzip(string saveFile)
         {
-            using var compressedFileStream = File.Open(SaveFileGzip, FileMode.Open);
+            using var compressedFileStream = File.Open(saveFile, FileMode.Open);
             using var decompressor = new GZipStream(compressedFileStream, CompressionMode.Decompress);
             using var memoryStream = new StreamReader(decompressor);
             return memoryStream.ReadToEnd();
