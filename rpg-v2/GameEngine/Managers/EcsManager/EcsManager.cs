@@ -94,6 +94,8 @@ namespace game.GameEngine
             {
                 if (newEntity.Mask[i])
                     newEntity.Components[i] = entity.Components[i];
+                else
+                    newEntity.Components[i] = null;
             }
         }
 

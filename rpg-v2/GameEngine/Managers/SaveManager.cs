@@ -11,16 +11,16 @@ using CompressionMode = System.IO.Compression.CompressionMode;
 
 namespace game.GameEngine
 {
-    public static class SaveManager
+    public class SaveManager 
     {
         //TODO: Make system to save multiple saves /change names, load different save etc.
-        //TODO: Find out why there is 1gb to be allocated when saving after loading
         private const string SaveFileGzip = "savefile.gz";
 
         public static void SaveGame()
         {
             var serialized = SerializeEntitiesToJson();
             CompressAndSaveJsonToGzip(serialized);
+            GC.Collect();
         }
 
         private static void CompressAndSaveJsonToGzip(string serialized)
@@ -30,6 +30,7 @@ namespace game.GameEngine
             using var compressedFileStream = File.Create(SaveFileGzip);
             using var compressor = new GZipStream(compressedFileStream, CompressionMode.Compress);
             compressor.Write(Encoding.UTF8.GetBytes(serialized));
+            compressor.Flush();
         }
 
         private static string SerializeEntitiesToJson()
@@ -47,6 +48,7 @@ namespace game.GameEngine
             var json = ReadJsonFromGzip();
             var entities = DeserializeEntitiesFromJson(json);
             LoadEntitiesAndPlayer(entities);
+            GC.Collect();
         }
 
         private static string ReadJsonFromGzip()
@@ -54,8 +56,7 @@ namespace game.GameEngine
             using var compressedFileStream = File.Open(SaveFileGzip, FileMode.Open);
             using var decompressor = new GZipStream(compressedFileStream, CompressionMode.Decompress);
             using var memoryStream = new StreamReader(decompressor);
-            var json = memoryStream.ReadToEnd();
-            return json;
+            return memoryStream.ReadToEnd();
         }
 
         private static void LoadEntitiesAndPlayer(ICollection<Entity> entities)
