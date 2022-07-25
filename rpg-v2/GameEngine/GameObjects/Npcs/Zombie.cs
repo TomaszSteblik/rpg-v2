@@ -1,9 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 using game.GameEngine.Components;
 using game.GameEngine.Systems.Helpers;
-using Microsoft.Xna.Framework;
 using rpg_v2;
 using Action = game.GameEngine.Components.Action;
 
@@ -11,17 +9,16 @@ namespace game.GameEngine.GameObjects.Npcs;
 
 public class Zombie
 {
-    public static void GenerateOnRandomPosition()
+    public static Entity GenerateOnRandomPosition()
     {
         var randomPosition = Map.GetRandomNotOccupiedPosition();
-        //register zombie
-        GenerateOnPosition(randomPosition.X,randomPosition.Y);
+        return GenerateOnPosition(randomPosition.X,randomPosition.Y);
     }
 
-    public static void GenerateOnPosition(int x, int y)
+    public static Entity GenerateOnPosition(int x, int y)
     {
         //register zombie
-        var zombie = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 4, 5, 6, 7});
+        var zombie = EcsManager.RegisterNewEntity(new[] {0, 1, 2, 3, 4, 5, 6, 7});
         
         Debug.WriteLine($"Zombie position: x: {x} y: {y}");
         
@@ -52,73 +49,15 @@ public class Zombie
         pathfinding.TargetX = randomPositionTarget.X;
         pathfinding.TargetY = randomPositionTarget.Y;
         
-        var delay = MainGame.Random.Next(1,3);
-        var meleeDamageZombie = 4;
-        var delayStep = 0;
-        //TODO:ATTACK PLAYER WHEN COLLIDING WITH HIM
-        action.EntityAction = () =>
-        {
-            if (delayStep >= delay)
-            {
-                var playerPosition = (Position) MainGame.PlayerEntity.Components[0];
-                var isPlayerVisible = VisionHelpers.IsPositionInFov(vision, playerPosition);
-                
-                if (pathfinding.Step >= pathfinding.Path.Count)
-                {
-                    pathfinding.NeedToFindNewPath = true;
-                
-                    var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
+        action.ActionType = ActionType.ZombieAction;
+        action.Delay = MainGame.Random.Next(1,3);
+        action.DelayStep = 0;
 
-                    pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
-                    pathfinding.TargetY = isPlayerVisible ? playerPosition.Y :randomPositionTargetLambda.Y;
-                    return;
-                }
+        var data = (PlayerData) zombie.Components[2];
 
-                if (Map.IsPositionOccupiedByCollidableEntity(pathfinding.Path[pathfinding.Step].X,
-                        pathfinding.Path[pathfinding.Step].Y) is false)
-                {
-                    if (isPlayerVisible)
-                    {
-                        pathfinding.NeedToFindNewPath = true;
+        data.MeleeDamage = 4;
+        data.IsPlayerCharacter = false;
 
-
-                        pathfinding.TargetX = playerPosition.X;
-                        pathfinding.TargetY = playerPosition.Y;
-                    }
-                    
-                    pos.X = pathfinding.Path[pathfinding.Step].X;
-                    pos.Y = pathfinding.Path[pathfinding.Step].Y;
-                    pathfinding.Step++;
-                    
-                    
-                }
-                else
-                {
-                    if (pathfinding.Path[pathfinding.Step].X == playerPosition.X &&
-                        pathfinding.Path[pathfinding.Step].Y == playerPosition.Y)
-                    {
-                        var playerHealth = (Health) MainGame.PlayerEntity.Components[6];
-                        playerHealth.Hp -= meleeDamageZombie;
-                        Debug.WriteLine("player dmged");
-                    }
-                    else
-                    {
-                        pathfinding.NeedToFindNewPath = true;
-                
-                        var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
-
-                        pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
-                        pathfinding.TargetY = isPlayerVisible ? playerPosition.Y :randomPositionTargetLambda.Y;
-                    }
-                }
-
-                delayStep = 0;
-            }
-            else
-            {
-                delayStep++;
-            }
-        };
-
+        return zombie;
     }
 }

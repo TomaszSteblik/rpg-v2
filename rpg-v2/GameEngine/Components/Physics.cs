@@ -1,4 +1,7 @@
-﻿namespace game.GameEngine.Components
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+
+namespace game.GameEngine.Components
 {
     public class Physics : Component
     {

@@ -85,5 +85,25 @@ namespace game.GameEngine
         {
             return _entities[guid];
         }
+
+        public static void LoadEntity(Entity entity)
+        {
+            var newEntity = RegisterNewEntity(entity.Guid);
+            newEntity.Mask = entity.Mask;
+            for (var i = 0; i < newEntity.Mask.Length; i++)
+            {
+                if (newEntity.Mask[i])
+                    newEntity.Components[i] = entity.Components[i];
+            }
+        }
+
+        private static Entity RegisterNewEntity(Guid guid)
+        {
+            var entity = new Entity(guid);
+
+            _entities.Add(entity.Guid,entity);
+            
+            return entity;
+        }
     }
 }

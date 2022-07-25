@@ -45,6 +45,7 @@ namespace game.GameEngine
             vision.Sight = 10;
             physicsPlayer.IsCollidable = true;
             playerData.MeleeDamage = 4;
+            playerData.IsPlayerCharacter = true;
 
             var currentColumn = startingX;
             var currentRow = startingY;

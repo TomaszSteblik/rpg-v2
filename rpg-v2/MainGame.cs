@@ -86,7 +86,6 @@ namespace rpg_v2
 
             CurrentGameState.Draw(_spriteBatch);
 
-            
             SpriteFontBase font18 = FontSystem.GetFont(18);
             _spriteBatch.DrawString(font18, $"{frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(font18, $"{(GC.GetTotalMemory(false)/1000000.0):F2}  MB", new Vector2(0, 18), Color.White);

@@ -1,11 +1,12 @@
-﻿using rpg_v2;
+﻿using System.Text.Json.Serialization;
+using rpg_v2;
 
 namespace game.GameEngine.Components
 {
     public class Vision : Component
     {
-        public bool[][] VisitedCells;
-        public bool[][] CellsInLightOfSight;
+        public bool[][] VisitedCells { get; set; }
+        public bool[][] CellsInLightOfSight { get; set; }
         public int Sight { get; set; }
 
         public Vision()

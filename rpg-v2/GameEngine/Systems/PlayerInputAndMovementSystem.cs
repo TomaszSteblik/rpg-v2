@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using game.GameEngine.Components;
@@ -121,14 +122,10 @@ namespace game.GameEngine.Systems
                 
             },true);
             
-            InputManager.StartTrackingKey(Keys.S, () =>
+            InputManager.StartTrackingKey(Keys.S,  () =>
             {
                 //TODO:create saving system
-                var entities = EcsManager.GetAllEntities();
-                var serialized = JsonSerializer.Serialize(entities,new JsonSerializerOptions()
-                {
-                });
-                Console.WriteLine();
+                SaveManager.SaveGame();
             });
         }
 

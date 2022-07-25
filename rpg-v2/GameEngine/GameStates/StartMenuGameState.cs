@@ -1,4 +1,8 @@
-﻿using FontStashSharp;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -89,6 +93,10 @@ namespace game.GameEngine.GameStates
                     case 0:
                         
                         Map.GenerateWallsAndFloors(MainGame.MapSize,MainGame.MapSize*20, MainGame.MapSize/10);
+                        MainGame.CurrentGameState = new MapGameState();
+                        break;
+                    case 2:
+                        SaveManager.LoadGame();
                         MainGame.CurrentGameState = new MapGameState();
                         break;
                     case 5:
