@@ -30,25 +30,21 @@ namespace rpg_v2
         private SpriteBatch _spriteBatch;
 
         private double _frameRate =0;
-
-        public static GameWindow GameWindow { get; private set; }
         
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            GameWindow = Window;
-
             _graphics.SynchronizeWithVerticalRetrace = false;
-            this.IsFixedTimeStep = false;
+            IsFixedTimeStep = false;
         }
-
-
+        
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 960;
-            _graphics.PreferredBackBufferHeight = 960;
+            _graphics.PreferredBackBufferWidth = (int) (1920 * 1);
+            _graphics.PreferredBackBufferHeight = (int) (1080 * 1);
+            //_graphics.IsFullScreen = true;
             
             _graphics.ApplyChanges();
             EcsManager.Init();
@@ -85,6 +81,8 @@ namespace rpg_v2
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
+            using var rt = new RenderTarget2D(GraphicsDevice, 1920, 1080);
+            GraphicsDevice.SetRenderTarget(rt);
 
             CurrentGameState.Draw(_spriteBatch);
 
@@ -92,8 +90,16 @@ namespace rpg_v2
             _spriteBatch.DrawString(font18, $"{_frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(font18, $"{(GC.GetTotalMemory(false)/1000000.0):F2}  MB", new Vector2(0, 18), Color.White);
 
+            _spriteBatch.End();
+            
+            _spriteBatch.Begin();
+            
+            GraphicsDevice.SetRenderTarget(null);
+            _spriteBatch.Draw(rt, new Rectangle(0,0,(int) (1*1920),(int) (1*1080)), Color.White);
 
             _spriteBatch.End();
+            
+            
             base.Draw(gameTime);
         }
     }

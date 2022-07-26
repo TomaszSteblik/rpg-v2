@@ -88,7 +88,7 @@ public class SaveMenuState : IGameState
                 else
                 {
                     _isTyping = true;
-                    MainGame.GameWindow.TextInput += (sender, args) =>
+                    Program.Game.Window.TextInput += (sender, args) =>
                     {
                         var pressedKey = args.Key;
                         if (pressedKey == Keys.Back)
