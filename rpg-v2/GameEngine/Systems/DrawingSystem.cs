@@ -18,9 +18,6 @@ namespace game.GameEngine.Systems
             {
                 DrawLayer(layer.AsEnumerable(),spriteBatch);
             }
-
-            
-            
         }
 
         private static void DrawEntity(SpriteBatch spriteBatch, Position position, Sprite sprite, Color color)

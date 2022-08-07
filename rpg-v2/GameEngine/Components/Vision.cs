@@ -8,11 +8,13 @@ namespace game.GameEngine.Components
         public bool[][] VisitedCells { get; set; }
         public bool[][] CellsInLightOfSight { get; set; }
         public int Sight { get; set; }
+        public int ArraySize { get; set; }
 
         public Vision()
         {
             Sight = 5;
             VisitedCells = new bool[MainGame.MapSize][];
+            ArraySize = MainGame.MapSize;
             CellsInLightOfSight = new bool[MainGame.MapSize][];
             for (var i = 0; i < VisitedCells.Length; i++)
             {
