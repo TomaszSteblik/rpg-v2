@@ -19,7 +19,6 @@ namespace rpg_v2
     {
         public static Random Random = new Random();
         public static Texture2D SpriteAtlas { get; set; }
-        
         public static FontSystem FontSystem;
         public static int MapSize { get; set; } = 60;
         public static Entity PlayerEntity;
@@ -30,7 +29,10 @@ namespace rpg_v2
         private SpriteBatch _spriteBatch;
 
         private double _frameRate =0;
-        
+        private SpriteFontBase _font18;
+        private readonly Rectangle _destinationScalingRectangle;
+        private readonly RenderTarget2D _gamertRenderTarget2D;
+
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -38,14 +40,14 @@ namespace rpg_v2
             IsMouseVisible = true;
             _graphics.SynchronizeWithVerticalRetrace = false;
             IsFixedTimeStep = false;
+            _destinationScalingRectangle = new Rectangle(0,0,Window.ClientBounds.Width,Window.ClientBounds.Height);
+            _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, 1500, 960);
         }
         
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = (int) (1920 * 1);
-            _graphics.PreferredBackBufferHeight = (int) (1080 * 1);
-            //_graphics.IsFullScreen = true;
-            
+            _graphics.HardwareModeSwitch = false;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             EcsManager.Init();
             SoundManager.Init(Content);
@@ -65,6 +67,7 @@ namespace rpg_v2
 
             FontSystem = new FontSystem();
             FontSystem.AddFont(File.ReadAllBytes(@"Content/Fonts/Girassol-Regular.ttf"));
+            _font18 = FontSystem.GetFont(18);
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,24 +82,18 @@ namespace rpg_v2
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
-            using var rt = new RenderTarget2D(GraphicsDevice, 1920, 1080);
-            GraphicsDevice.SetRenderTarget(rt);
+             GraphicsDevice.SetRenderTarget(_gamertRenderTarget2D);
+             CurrentGameState.Draw(_spriteBatch);
 
-            CurrentGameState.Draw(_spriteBatch);
+             _spriteBatch.End();
 
-            SpriteFontBase font18 = FontSystem.GetFont(18);
-            _spriteBatch.DrawString(font18, $"{_frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
-            _spriteBatch.DrawString(font18, $"{(GC.GetTotalMemory(false)/1000000.0):F2}  MB", new Vector2(0, 18), Color.White);
-
-            _spriteBatch.End();
-            
             _spriteBatch.Begin();
             
             GraphicsDevice.SetRenderTarget(null);
-            _spriteBatch.Draw(rt, new Rectangle(0,0,(int) (1*1920),(int) (1*1080)), Color.White);
-
+            _spriteBatch.Draw(_gamertRenderTarget2D, _destinationScalingRectangle, Color.White);
+            _spriteBatch.DrawString(_font18, $"{_frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
+            _spriteBatch.DrawString(_font18, $"{(GC.GetTotalMemory(false)/1000000.0):F2}  MB", new Vector2(0, 18), Color.White);
             _spriteBatch.End();
             
             
