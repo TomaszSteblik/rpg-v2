@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using FontStashSharp;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using rpg_v2;
 
 namespace game.GameEngine.GameStates;
