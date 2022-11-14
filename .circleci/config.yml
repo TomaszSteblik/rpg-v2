@@ -1,6 +1,6 @@
 version: 2.1
 executors:
-  net-executor6:
+  net-executor7:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk
 
@@ -12,7 +12,7 @@ executors:
 jobs:
   tests:
 
-    executor: net-executor6
+    executor: net-executor7
     steps:
       - checkout
       - run: |
@@ -34,9 +34,9 @@ jobs:
           apt-get update; \
           apt-get install -y apt-transport-https && \
           apt-get update && \
-          apt-get install -y dotnet-sdk-6.0
+          apt-get install -y dotnet-sdk-7.0
       - run: |
-          dotnet publish --framework net6.0 --runtime osx-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net7.0 --runtime osx-x64 --self-contained -c Release -o workspace/mac-output rpg-v2/rpg-v2.csproj
       - persist_to_workspace:
           root: workspace
           paths:
@@ -57,9 +57,9 @@ jobs:
           apt-get update; \
           apt-get install -y apt-transport-https && \
           apt-get update && \
-          apt-get install -y dotnet-sdk-6.0
+          apt-get install -y dotnet-sdk-7.0
       - run: |
-          dotnet publish --framework net6.0 --runtime win-x64 --self-contained -c Release -o workspace/win-output rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net7.0 --runtime win-x64 --self-contained -c Release -o workspace/win-output rpg-v2/rpg-v2.csproj
       - persist_to_workspace:
           root: workspace
           paths:
@@ -79,9 +79,9 @@ jobs:
           apt-get update; \
           apt-get install -y apt-transport-https && \
           apt-get update && \
-          apt-get install -y dotnet-sdk-6.0
+          apt-get install -y dotnet-sdk-7.0
       - run: |
-          dotnet publish --framework net6.0 --runtime linux-x64 --self-contained -c Release -o workspace/linux-output rpg-v2/rpg-v2.csproj
+          dotnet publish --framework net7.0 --runtime linux-x64 --self-contained -c Release -o workspace/linux-output rpg-v2/rpg-v2.csproj
       - persist_to_workspace:
           root: workspace
           paths:
@@ -137,7 +137,7 @@ jobs:
           apt-get update; \
           apt-get install -y apt-transport-https && \
           apt-get update && \
-          apt-get install -y dotnet-sdk-6.0
+          apt-get install -y dotnet-sdk-7.0
       - run: |
           dotnet tool install --global dotnet-sonarscanner
           export PATH="$PATH:/root/.dotnet/tools"
