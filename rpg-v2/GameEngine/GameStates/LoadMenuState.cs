@@ -13,7 +13,7 @@ public class LoadMenuState : IGameState
 {
     private readonly InputManager _inputManager;
     private int _selectPosition;
-    private readonly string[] _saveFiles;
+    private string[] _saveFiles;
         
     public void Draw(SpriteBatch spriteBatch)
     {
@@ -57,7 +57,9 @@ public class LoadMenuState : IGameState
         
         _inputManager.StartTrackingKey(Keys.Enter, ConfirmSelection);
         
-        _inputManager.StartTrackingKey(Keys.Escape, () => MainGame.CurrentGameState = new MapGameState());
+        _inputManager.StartTrackingKey(Keys.Escape, () => MainGame.CurrentGameState = new StartMenuGameState());
+        
+        _inputManager.StartTrackingKey(Keys.R, DeleteSelection, false);
     }
 
     private void ConfirmSelection()
@@ -68,7 +70,7 @@ public class LoadMenuState : IGameState
 
     private void MoveSelectDown()
     {
-        if (_selectPosition >= _saveFiles.Length)
+        if (_selectPosition >= _saveFiles.Length - 1)
         {
             _selectPosition = 0;
         }
@@ -80,13 +82,23 @@ public class LoadMenuState : IGameState
 
     private void MoveSelectUp()
     {
-        if (_selectPosition < 0)
+        if (_selectPosition <= 0)
         {
-            _selectPosition = _saveFiles.Length;
+            _selectPosition = _saveFiles.Length - 1;
         }
         else
         {
             _selectPosition--;
         }
+    }
+    
+    private void DeleteSelection()
+    {
+        if(_saveFiles.Length == 0)
+            return;
+        File.Delete(_saveFiles[_selectPosition]);
+        _saveFiles = _saveFiles.Except(new []{_saveFiles[_selectPosition]}).ToArray();
+        if (_selectPosition > _saveFiles.Length)
+            _selectPosition = _saveFiles.Length;
     }
 }

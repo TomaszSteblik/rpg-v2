@@ -9,6 +9,7 @@
         <RuntimeIdentifier>osx-arm64</RuntimeIdentifier>
         <DebugType>embedded</DebugType>
         <SelfContained>true</SelfContained>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -29,6 +30,7 @@
         <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Autofac" Version="6.4.0" />
         <PackageReference Include="FontStashSharp.MonoGame" Version="1.2.8" />
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
