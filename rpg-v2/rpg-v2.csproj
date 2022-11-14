@@ -2,7 +2,7 @@
     <PropertyGroup>
         <!--mgcb /quiet /@:/Users/tsteblik/Source/RiderProjects/rpg-v2/rpg-v2/Content/Content.mgcb" /platform:DesktopGL /outputDir:"/Users/tsteblik/Source/RiderProjects/rpg-v2/rpg-v2/Content/bin/DesktopGL/Content" /intermediateDir:"/Users/tsteblik/Source/RiderProjects/rpg-v2/rpg-v2/Content/obj/DesktopGL/Content" /workingDir:"/Users/tsteblik/Source/RiderProjects/rpg-v2/rpg-v2/Content/" -->
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <PublishReadyToRun>false</PublishReadyToRun>
         <TieredCompilation>false</TieredCompilation>
         <LangVersion>10</LangVersion>
@@ -31,9 +31,9 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Autofac" Version="6.4.0" />
-        <PackageReference Include="FontStashSharp.MonoGame" Version="1.0.3" />
-        <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.263" />
-        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.263" />
+        <PackageReference Include="FontStashSharp.MonoGame" Version="1.2.8" />
+        <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Content\Fonts\Girassol-Regular.ttf" />
