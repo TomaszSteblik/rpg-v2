@@ -17,6 +17,7 @@ namespace rpg_v2
 {
     public class MainGame : Game
     {
+        private const int TileSize = 16;
         public static Random Random = new Random();
         public static Texture2D SpriteAtlas { get; set; }
         public static FontSystem FontSystem;
@@ -31,7 +32,7 @@ namespace rpg_v2
         private double _frameRate =0;
         private SpriteFontBase _font18;
         private readonly Rectangle _destinationScalingRectangle;
-        private readonly RenderTarget2D _gamertRenderTarget2D;
+        private RenderTarget2D _gamertRenderTarget2D;
 
         public MainGame()
         {
@@ -40,12 +41,14 @@ namespace rpg_v2
             IsMouseVisible = true;
             _graphics.SynchronizeWithVerticalRetrace = false;
             IsFixedTimeStep = false;
-            _destinationScalingRectangle = new Rectangle(0,0,Window.ClientBounds.Width,Window.ClientBounds.Height);
-            _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, 1500, 960);
+            _destinationScalingRectangle = new Rectangle(0,0,MapSize*TileSize,MapSize*TileSize);
         }
+
+        private int smth => 3024 / 1964;
         
         protected override void Initialize()
         {
+            _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, MapSize*TileSize,MapSize*TileSize);
             _graphics.HardwareModeSwitch = false;
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
