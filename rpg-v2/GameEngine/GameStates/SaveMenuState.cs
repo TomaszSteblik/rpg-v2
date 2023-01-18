@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using FontStashSharp;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using rpg_v2;
 
 namespace game.GameEngine.GameStates;
@@ -10,7 +13,7 @@ public class SaveMenuState : IGameState
 {
     private readonly InputManager _inputManager;
     private int _selectPosition;
-    private readonly string[] _saveFiles;
+    private string[] _saveFiles;
     private bool _isTyping;
     private string _typedName;
     private string DisplayTypedName => string.IsNullOrWhiteSpace(_typedName) ? "..." : _typedName;
@@ -62,6 +65,22 @@ public class SaveMenuState : IGameState
         _inputManager.StartTrackingKey(Keys.Enter, () => ConfirmSelection(saveFolderPath),true);
 
         _inputManager.StartTrackingKey(Keys.Escape, Cancel, false);
+        
+        _inputManager.StartTrackingKey(Keys.R, DeleteSelection, false);
+    }
+
+    private void DeleteSelection()
+    {
+        if(_selectPosition == 0)
+            return;
+        
+        if(_saveFiles.Length == 0)
+            return;
+        
+        File.Delete(_saveFiles[_selectPosition-1]);
+        _saveFiles = _saveFiles.Except(new []{_saveFiles[_selectPosition-1]}).ToArray();
+        if (_selectPosition > _saveFiles.Length - 1)
+            _selectPosition = _saveFiles.Length;    
     }
 
     private void Cancel()
@@ -88,7 +107,7 @@ public class SaveMenuState : IGameState
                 else
                 {
                     _isTyping = true;
-                    MainGame.GameWindow.TextInput += (sender, args) =>
+                    Program.Game.Window.TextInput += (sender, args) =>
                     {
                         var pressedKey = args.Key;
                         if (pressedKey == Keys.Back)
