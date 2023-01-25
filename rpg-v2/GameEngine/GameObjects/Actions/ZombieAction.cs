@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using game.GameEngine.Components;
+using game.GameEngine.GameObjects.States;
 using game.GameEngine.Systems.Helpers;
 using rpg_v2;
 using Action = game.GameEngine.Components.Action;
@@ -62,6 +63,13 @@ public static class ZombieAction
                     var playerHealth = (Health) MainGame.PlayerEntity.Components[6];
                     playerHealth.Hp -= data.MeleeDamage;
                     Debug.WriteLine("player dmged");
+                    var rollIfBleed = Random.Shared.Next(0, 100);
+                    if (rollIfBleed <= 10)
+                    {
+                        var playerStates = (EntityStates) MainGame.PlayerEntity.Components[8];
+                        playerStates.Data.Add(new BleedingData(playerHealth, Random.Shared.Next(3,5),1));
+                        Debug.WriteLine("zombie applied bleed to player");
+                    }
                 }
                 else
                 {

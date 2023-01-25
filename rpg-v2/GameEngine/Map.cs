@@ -27,7 +27,7 @@ namespace game.GameEngine
             var startingX = MainGame.Random.Next(1, size-1);
             var startingY = MainGame.Random.Next(1, size-1);
             
-            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 2, 4, 6});
+            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 2, 4, 6, 8});
 
             var position = (Position) MainGame.PlayerEntity.Components[0];
             var spriteP = (Sprite) MainGame.PlayerEntity.Components[1];

@@ -17,16 +17,10 @@ namespace game.GameEngine.Components
         #nullable enable
         public override bool Equals(object? obj)
         {
-            if (obj is null)
-                return false;
             if (obj is not Position otherPosition)
-            {
                 return false;
-            }
-            else
-            {
-                return otherPosition.X == this.X && otherPosition.Y == this.Y;
-            }
+
+            return otherPosition.X == this.X && otherPosition.Y == this.Y;
 
         }
 

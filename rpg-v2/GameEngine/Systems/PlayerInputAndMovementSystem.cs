@@ -129,10 +129,11 @@ namespace game.GameEngine.Systems
             });
         }
 
-        public static void Act(GameTime gameTime)
+        public static bool Act(GameTime gameTime)
         {
-            InputManager.CheckInputAndAct(gameTime);
+            var acted = InputManager.CheckInputAndAct(gameTime);
             InputManager.UpdateStates(gameTime);
+            return acted;
         }
     }
 }

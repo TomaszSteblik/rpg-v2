@@ -35,7 +35,7 @@ namespace game.GameEngine
             }
         }
 
-        public void CheckInputAndAct(GameTime gameTime)
+        public bool CheckInputAndAct(GameTime gameTime)
         {
             for (var index = 0; index < _trackedKeysList.Count; index++)
             {
@@ -44,7 +44,7 @@ namespace game.GameEngine
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
-                    return;
+                    return true;
                 }
                 
                 if (_keysToRepeat.Contains(key)
@@ -54,9 +54,11 @@ namespace game.GameEngine
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public void UpdateStates(GameTime gameTime)
