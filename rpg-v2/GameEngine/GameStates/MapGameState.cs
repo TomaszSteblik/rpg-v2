@@ -19,7 +19,7 @@ namespace game.GameEngine.GameStates
                 StatesSystem.Act();
                 HealthSystem.Act();
             }
-            
+
             playerActed = PlayerInputAndMovementSystem.Act(gameTime);
             if (playerActed)
             {
@@ -27,7 +27,7 @@ namespace game.GameEngine.GameStates
                 PathfindingSystem.Act();
                 FieldOfViewSystem.Act();
             }
-            
+
         }
 
         public MapGameState()

@@ -17,20 +17,20 @@ public class SaveMenuState : IGameState
     private bool _isTyping;
     private string _typedName;
     private string DisplayTypedName => string.IsNullOrWhiteSpace(_typedName) ? "..." : _typedName;
-        
+
     public void Draw(SpriteBatch spriteBatch)
     {
         var font = MainGame.FontSystem.GetFont(22);
         const int xPosition = 120;
         var yPosition = 300;
-        spriteBatch.DrawString(font, _isTyping ? DisplayTypedName : "New save", 
+        spriteBatch.DrawString(font, _isTyping ? DisplayTypedName : "New save",
             new Vector2(xPosition, yPosition), _selectPosition == 0 ? Color.Blue : Color.White);
         for (var index = 0; index < _saveFiles.Length; index++)
         {
             var saveFile = _saveFiles[index];
             yPosition += 42;
-            spriteBatch.DrawString(font, saveFile.Split(new []{'/', '\\'}, StringSplitOptions.None).Last(), 
-                new Vector2(xPosition, yPosition), _selectPosition == index+1 ? Color.Blue : Color.White);
+            spriteBatch.DrawString(font, saveFile.Split(new[] { '/', '\\' }, StringSplitOptions.None).Last(),
+                new Vector2(xPosition, yPosition), _selectPosition == index + 1 ? Color.Blue : Color.White);
         }
     }
 
@@ -47,40 +47,40 @@ public class SaveMenuState : IGameState
         _isTyping = false;
         _typedName = string.Empty;
 
-        var saveFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"SourceOfMagic","Saves");
-        
+        var saveFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SourceOfMagic", "Saves");
+
         if (!Directory.Exists(saveFolderPath))
             Directory.CreateDirectory(saveFolderPath);
-        
+
         _saveFiles = Directory.GetFiles(saveFolderPath);
-        
-        _inputManager.StartTrackingKey(Keys.Up, MoveSelectUp,true);
-        
-        _inputManager.StartTrackingKey(Keys.Down, MoveSelectDown,true);
-        
-        _inputManager.StartTrackingKey(Keys.W, MoveSelectUp,true);
-        
-        _inputManager.StartTrackingKey(Keys.S, MoveSelectDown,true);
-        
-        _inputManager.StartTrackingKey(Keys.Enter, () => ConfirmSelection(saveFolderPath),true);
+
+        _inputManager.StartTrackingKey(Keys.Up, MoveSelectUp, true);
+
+        _inputManager.StartTrackingKey(Keys.Down, MoveSelectDown, true);
+
+        _inputManager.StartTrackingKey(Keys.W, MoveSelectUp, true);
+
+        _inputManager.StartTrackingKey(Keys.S, MoveSelectDown, true);
+
+        _inputManager.StartTrackingKey(Keys.Enter, () => ConfirmSelection(saveFolderPath), true);
 
         _inputManager.StartTrackingKey(Keys.Escape, Cancel, false);
-        
+
         _inputManager.StartTrackingKey(Keys.R, DeleteSelection, false);
     }
 
     private void DeleteSelection()
     {
-        if(_selectPosition == 0)
+        if (_selectPosition == 0)
             return;
-        
-        if(_saveFiles.Length == 0)
+
+        if (_saveFiles.Length == 0)
             return;
-        
-        File.Delete(_saveFiles[_selectPosition-1]);
-        _saveFiles = _saveFiles.Except(new []{_saveFiles[_selectPosition-1]}).ToArray();
+
+        File.Delete(_saveFiles[_selectPosition - 1]);
+        _saveFiles = _saveFiles.Except(new[] { _saveFiles[_selectPosition - 1] }).ToArray();
         if (_selectPosition > _saveFiles.Length - 1)
-            _selectPosition = _saveFiles.Length;    
+            _selectPosition = _saveFiles.Length;
     }
 
     private void Cancel()

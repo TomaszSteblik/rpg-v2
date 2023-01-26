@@ -14,7 +14,7 @@ public class LoadMenuState : IGameState
     private readonly InputManager _inputManager;
     private int _selectPosition;
     private string[] _saveFiles;
-        
+
     public void Draw(SpriteBatch spriteBatch)
     {
         var font = MainGame.FontSystem.GetFont(22);
@@ -24,7 +24,7 @@ public class LoadMenuState : IGameState
         {
             var saveFile = _saveFiles[index];
             yPosition += 42;
-            spriteBatch.DrawString(font, saveFile.Split(new []{'/', '\\'},StringSplitOptions.None).Last(),
+            spriteBatch.DrawString(font, saveFile.Split(new[] { '/', '\\' }, StringSplitOptions.None).Last(),
                 new Vector2(xPosition, yPosition), _selectPosition == index ? Color.Blue : Color.White);
         }
     }
@@ -40,25 +40,25 @@ public class LoadMenuState : IGameState
         _inputManager = new InputManager();
         _selectPosition = 0;
 
-        var saveFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"SourceOfMagic","Saves");
-        
+        var saveFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SourceOfMagic", "Saves");
+
         if (!Directory.Exists(saveFolderPath))
             Directory.CreateDirectory(saveFolderPath);
 
         _saveFiles = Directory.GetFiles(saveFolderPath);
-        
-        _inputManager.StartTrackingKey(Keys.Up, MoveSelectUp,true);
-        
-        _inputManager.StartTrackingKey(Keys.Down, MoveSelectDown,true);
-        
-        _inputManager.StartTrackingKey(Keys.W, MoveSelectUp,true);
-        
-        _inputManager.StartTrackingKey(Keys.S, MoveSelectDown,true);
-        
+
+        _inputManager.StartTrackingKey(Keys.Up, MoveSelectUp, true);
+
+        _inputManager.StartTrackingKey(Keys.Down, MoveSelectDown, true);
+
+        _inputManager.StartTrackingKey(Keys.W, MoveSelectUp, true);
+
+        _inputManager.StartTrackingKey(Keys.S, MoveSelectDown, true);
+
         _inputManager.StartTrackingKey(Keys.Enter, ConfirmSelection);
-        
+
         _inputManager.StartTrackingKey(Keys.Escape, () => MainGame.CurrentGameState = new StartMenuGameState());
-        
+
         _inputManager.StartTrackingKey(Keys.R, DeleteSelection, false);
     }
 
@@ -91,13 +91,13 @@ public class LoadMenuState : IGameState
             _selectPosition--;
         }
     }
-    
+
     private void DeleteSelection()
     {
-        if(_saveFiles.Length == 0)
+        if (_saveFiles.Length == 0)
             return;
         File.Delete(_saveFiles[_selectPosition]);
-        _saveFiles = _saveFiles.Except(new []{_saveFiles[_selectPosition]}).ToArray();
+        _saveFiles = _saveFiles.Except(new[] { _saveFiles[_selectPosition] }).ToArray();
         if (_selectPosition > _saveFiles.Length)
             _selectPosition = _saveFiles.Length;
     }

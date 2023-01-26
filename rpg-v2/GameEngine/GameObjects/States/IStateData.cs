@@ -6,7 +6,7 @@ public interface IStateData
 {
     public Type OwnerType { get; }
     public StateStatus Status { get; set; }
-    
+
 }
 
 public enum StateStatus

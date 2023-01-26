@@ -8,30 +8,30 @@ namespace game.GameEngine.Systems
 {
     public static class FieldOfViewSystem
     {
-        private static Dictionary<Position,Entity> Entities;
+        private static Dictionary<Position, Entity> Entities;
         public static void Act()
         {
-            Entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0, 3})
-                .Where(x=>((Physics) x.Components[3]).BlocksVision)
+            Entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 })
+                .Where(x => ((Physics)x.Components[3]).BlocksVision)
                 .ToDictionary(entity => entity.Components[0] as Position);
 
-            foreach (var entity in EcsManager.QueryEntitiesByComponentsIndexes(new []{0,4}))
+            foreach (var entity in EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 4 }))
             {
-                UpdateFieldOfView((Position) entity.Components[0],(Vision) entity.Components[4]);                
+                UpdateFieldOfView((Position)entity.Components[0], (Vision)entity.Components[4]);
             }
-            
-            
-            
+
+
+
 
         }
-        
+
         public static void UpdateFieldOfView(Position position, Vision vision)
         {
 
-            var xycomp = new[] {0, 1, -1, 0, 0, -1, 1, 0};
-            var xxcomp = new[] {1, 0, 0, -1, -1, 0, 0, 1};
-            var yxcomp = new[] {0, 1, 1, 0, 0, -1, -1, 0};
-            var yycomp = new[] {1, 0, 0, 1, -1, 0, 0, -1};
+            var xycomp = new[] { 0, 1, -1, 0, 0, -1, 1, 0 };
+            var xxcomp = new[] { 1, 0, 0, -1, -1, 0, 0, 1 };
+            var yxcomp = new[] { 0, 1, 1, 0, 0, -1, -1, 0 };
+            var yycomp = new[] { 1, 0, 0, 1, -1, 0, 0, -1 };
 
 
 
@@ -42,17 +42,17 @@ namespace game.GameEngine.Systems
                     vision.CellsInLightOfSight[i][j] = false;
                 }
             }
-            
+
             vision.CellsInLightOfSight[position.X][position.Y] = true;
 
-            
+
             for (int i = 0; i < xxcomp.Length; i++)
             {
-                Scan(0,position,1,0,xxcomp[i],yycomp[i],xycomp[i],yxcomp[i], vision);
+                Scan(0, position, 1, 0, xxcomp[i], yycomp[i], xycomp[i], yxcomp[i], vision);
             }
 
         }
-        private static void Scan(int row,Position position,float startSlope,float endSlope,int xx,int yy,int xy,int yx, Vision vision)
+        private static void Scan(int row, Position position, float startSlope, float endSlope, int xx, int yy, int xy, int yx, Vision vision)
         {
             var startX = position.X;
             var startY = position.Y;
@@ -66,49 +66,49 @@ namespace game.GameEngine.Systems
                 {
                     for (int j = minCol; j >= maxCol; j--)
                     {
-                        var deltaY = j * yy + i*yx;
-                        var deltaX = i * xx + j*xy;
+                        var deltaY = j * yy + i * yx;
+                        var deltaX = i * xx + j * xy;
 
-                        if(deltaX+startX < 0 || startY+deltaY < 0 || deltaX+startX >= vision.ArraySize || startY+deltaY >= vision.ArraySize )
+                        if (deltaX + startX < 0 || startY + deltaY < 0 || deltaX + startX >= vision.ArraySize || startY + deltaY >= vision.ArraySize)
                             continue;
-                        
-                        var doesBlockingEntityExist = Entities.ContainsKey(new Position(){X = deltaX+startX,Y = startY+deltaY});
-                            
-                        
+
+                        var doesBlockingEntityExist = Entities.ContainsKey(new Position() { X = deltaX + startX, Y = startY + deltaY });
+
+
                         if (j == minCol && doesBlockingEntityExist)
                         {
-                            
+
                             vision.VisitedCells[startX + deltaX][startY + deltaY] = true;
                             vision.CellsInLightOfSight[startX + deltaX][startY + deltaY] = true;
-                            
-                            
+
+
                             blocked = true;
                             continue;
                         }
-                        
+
                         if (!blocked && !doesBlockingEntityExist)
                         {
-                            
+
                             vision.VisitedCells[startX + deltaX][startY + deltaY] = true;
                             vision.CellsInLightOfSight[startX + deltaX][startY + deltaY] = true;
-                            
+
                         }
                         if (blocked && doesBlockingEntityExist)
                         {
-                            
-                            
+
+
                             vision.VisitedCells[startX + deltaX][startY + deltaY] = true;
                             vision.CellsInLightOfSight[startX + deltaX][startY + deltaY] = true;
-                            
+
                             continue;
                         }
                         if (blocked && !doesBlockingEntityExist)
                         {
                             blocked = false;
-                            
+
                             vision.VisitedCells[startX + deltaX][startY + deltaY] = true;
                             vision.CellsInLightOfSight[startX + deltaX][startY + deltaY] = true;
-                            
+
                             startSlope = (j + 0.5f) / (i + 0.5f);
                         }
                         if (!blocked && doesBlockingEntityExist)
@@ -116,16 +116,16 @@ namespace game.GameEngine.Systems
 
                             vision.VisitedCells[startX + deltaX][startY + deltaY] = true;
                             vision.CellsInLightOfSight[startX + deltaX][startY + deltaY] = true;
-                            
-                            var newEndSlope = (j + 0.5f) /(i - 0.5f);
-                            Scan(i+1,position,startSlope,newEndSlope,xx,yy,xy,yx,vision);
+
+                            var newEndSlope = (j + 0.5f) / (i - 0.5f);
+                            Scan(i + 1, position, startSlope, newEndSlope, xx, yy, xy, yx, vision);
                             blocked = true;
                         }
                     }
                 }
             }
         }
-        
-        
+
+
     }
 }

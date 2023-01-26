@@ -14,7 +14,7 @@ namespace game.GameEngine.Components
             Y = 1;
         }
 
-        #nullable enable
+#nullable enable
         public override bool Equals(object? obj)
         {
             if (obj is not Position otherPosition)

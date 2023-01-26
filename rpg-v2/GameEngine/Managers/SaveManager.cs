@@ -11,7 +11,7 @@ using CompressionMode = System.IO.Compression.CompressionMode;
 
 namespace game.GameEngine
 {
-    public static class SaveManager 
+    public static class SaveManager
     {
         public static void SaveGame(string path)
         {
@@ -23,10 +23,10 @@ namespace game.GameEngine
         {
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("Empty save dir path");
-            
+
             if (File.Exists(path))
                 File.Delete(path);
-            
+
             using var compressedFileStream = File.Create(path);
             using var compressor = new GZipStream(compressedFileStream, CompressionMode.Compress);
             compressor.Write(Encoding.UTF8.GetBytes(serialized));

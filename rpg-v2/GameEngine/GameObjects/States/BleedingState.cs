@@ -41,7 +41,7 @@ public class BleedingData : IStateData
     public int CurrentTick { get; set; }
     public int MaxTick { get; }
     public int TickDamage { get; }
-    
+
     public Type OwnerType => typeof(BleedingState);
     public StateStatus Status { get; set; }
 

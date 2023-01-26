@@ -10,18 +10,18 @@ namespace game.GameEngine.Systems
     {
         public static void Act()
         {
-            var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0,5});
+            var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 5 });
             foreach (var entity in entities)
             {
-                var pathfindingComponent = (Pathfinding) entity.Components[5];
-                
-                if(pathfindingComponent.NeedToFindNewPath is false)
+                var pathfindingComponent = (Pathfinding)entity.Components[5];
+
+                if (pathfindingComponent.NeedToFindNewPath is false)
                     continue;
 
-                var position = (Position) entity.Components[0];
+                var position = (Position)entity.Components[0];
 
-                var didFindPath = FindPath(position.X,position.Y,
-                    pathfindingComponent.TargetX,pathfindingComponent.TargetY, 
+                var didFindPath = FindPath(position.X, position.Y,
+                    pathfindingComponent.TargetX, pathfindingComponent.TargetY,
                     out var foudPath);
 
                 if (didFindPath is false)
@@ -36,13 +36,13 @@ namespace game.GameEngine.Systems
 
             }
         }
-          
+
         [Description("Returns distance between two nodes, using pitagoras theorem")]
         public static double CalculateDistance(Node start, Node goal)
         {
             return Math.Pow((start.X - goal.Y), 2) + Math.Pow(start.Y - goal.Y, 2);
         }
-        
+
         [Description("Returns true if can return out var list of nodes(path) from starting node to destination node, " +
                      "returns false if can't reach destination")]
         public static bool FindPath(int startX, int startY, int destX, int destY, out List<Node> path)

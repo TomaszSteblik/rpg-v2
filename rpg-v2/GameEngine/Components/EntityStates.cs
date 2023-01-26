@@ -11,5 +11,5 @@ public class EntityStates : Component
     {
         Data = new List<IStateData>();
     }
-    
+
 }

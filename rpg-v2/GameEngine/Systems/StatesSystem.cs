@@ -8,16 +8,16 @@ public static class StatesSystem
 {
     public static void Act()
     {
-        var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] {8});
+        var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 8 });
         foreach (var entity in entities)
         {
-            var states = (EntityStates) entity.Components[8];
+            var states = (EntityStates)entity.Components[8];
             foreach (var stateData in states.Data)
             {
-                var state = Activator.CreateInstance(stateData.OwnerType) as IState ?? 
+                var state = Activator.CreateInstance(stateData.OwnerType) as IState ??
                             throw new Exception("Failed to create state");
 
-                switch(stateData.Status)
+                switch (stateData.Status)
                 {
                     case StateStatus.Created:
                         state.OnCreate(stateData);
