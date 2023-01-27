@@ -9,6 +9,6 @@ namespace game.GameEngine.GameStates
     {
         public void Draw(SpriteBatch spriteBatch);
         public void Update(GameTime gameTime);
-        
+
     }
 }

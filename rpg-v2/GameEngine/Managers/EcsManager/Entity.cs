@@ -6,13 +6,13 @@ namespace game.GameEngine
     public class Entity
     {
         public Guid Guid { get; set; }
-        
+
         [JsonInclude]
         public Component[] Components;
-        
+
         [JsonInclude]
         public bool[] Mask;
-        
+
 
         public Entity()
         {
@@ -26,7 +26,7 @@ namespace game.GameEngine
             Guid = guid;
             InitEntity();
         }
-        
+
         private void InitEntity()
         {
             //init mask, all entries at false

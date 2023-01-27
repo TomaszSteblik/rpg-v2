@@ -6,10 +6,10 @@ namespace game.GameEngine.Systems
     {
         public static void Act()
         {
-            var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] {6});
+            var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 6 });
             foreach (var entity in entities)
             {
-                if (((Health) entity.Components[6]).Hp <= 0)
+                if (((Health)entity.Components[6]).Hp <= 0)
                 {
                     EcsManager.UnregisterEntity(entity);
                 }

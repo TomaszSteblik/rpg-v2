@@ -24,17 +24,17 @@ namespace game.GameEngine
                 }
             }
 
-            var startingX = MainGame.Random.Next(1, size-1);
-            var startingY = MainGame.Random.Next(1, size-1);
-            
-            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] {0, 1, 3, 2, 4, 6});
+            var startingX = MainGame.Random.Next(1, size - 1);
+            var startingY = MainGame.Random.Next(1, size - 1);
 
-            var position = (Position) MainGame.PlayerEntity.Components[0];
-            var spriteP = (Sprite) MainGame.PlayerEntity.Components[1];
-            var vision = (Vision) MainGame.PlayerEntity.Components[4];
-            var physicsPlayer = (Physics) MainGame.PlayerEntity.Components[3];
-            var playerData = (PlayerData) MainGame.PlayerEntity.Components[2];
-            var playerHealth = (Health) MainGame.PlayerEntity.Components[6];
+            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8 });
+
+            var position = (Position)MainGame.PlayerEntity.Components[0];
+            var spriteP = (Sprite)MainGame.PlayerEntity.Components[1];
+            var vision = (Vision)MainGame.PlayerEntity.Components[4];
+            var physicsPlayer = (Physics)MainGame.PlayerEntity.Components[3];
+            var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
+            var playerHealth = (Health)MainGame.PlayerEntity.Components[6];
             playerHealth.Hp = 30;
             position.X = startingX;
             position.Y = startingY;
@@ -58,7 +58,7 @@ namespace game.GameEngine
                 new int[] {0, -1},
                 new int[] {0, 1}
             };
-            var lastDirection = new[] {2, 2};
+            var lastDirection = new[] { 2, 2 };
 
 
             while (tunnels > 0)
@@ -108,14 +108,14 @@ namespace game.GameEngine
                     if (map[i][j])
                     {
 
-                        var e = EcsManager.RegisterNewEntity(new[] {0, 1,3});
+                        var e = EcsManager.RegisterNewEntity(new[] { 0, 1, 3 });
                         var pos = (e.Components[0] as Position);
                         pos.X = j;
                         pos.Y = i;
                         var sprite = (e.Components[1] as Sprite);
                         sprite.AtlasPositionX = 0;
                         sprite.AtlasPositionY = 11;
-                        var physics = (Physics) e.Components[3];
+                        var physics = (Physics)e.Components[3];
                         physics.IsCollidable = true;
                         physics.BlocksVision = true;
                         var visionA = e.Components[4] as Vision;
@@ -125,14 +125,14 @@ namespace game.GameEngine
                     else
                     {
 
-                        var e = EcsManager.RegisterNewEntity(new[] {0, 1,3});
+                        var e = EcsManager.RegisterNewEntity(new[] { 0, 1, 3 });
                         var pos = (e.Components[0] as Position);
                         pos.X = j;
                         pos.Y = i;
                         var sprite = (e.Components[1] as Sprite);
                         sprite.AtlasPositionX = 10;
                         sprite.AtlasPositionY = 15;
-                        var physics = (Physics) e.Components[3];
+                        var physics = (Physics)e.Components[3];
                         physics.IsCollidable = false;
                         physics.BlocksVision = false;
                         var visionA = e.Components[4] as Vision;
@@ -141,7 +141,7 @@ namespace game.GameEngine
                     }
                 }
             }
-            
+
             Zombie.GenerateOnRandomPosition();
             Zombie.GenerateOnRandomPosition();
             Zombie.GenerateOnRandomPosition();
@@ -151,13 +151,13 @@ namespace game.GameEngine
 
         }
 
-        public static bool IsPositionOccupiedByCollidableEntity(int x,int y)
+        public static bool IsPositionOccupiedByCollidableEntity(int x, int y)
         {
-            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0, 3});
+            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
 
-            return entites.Any(z => ((Position) z.Components[0]).X == x 
-                                    && ((Position) z.Components[0]).Y == y 
-                                    && ((Physics) z.Components[3]).IsCollidable == true);
+            return entites.Any(z => ((Position)z.Components[0]).X == x
+                                    && ((Position)z.Components[0]).Y == y
+                                    && ((Physics)z.Components[3]).IsCollidable == true);
 
         }
 
@@ -166,29 +166,29 @@ namespace game.GameEngine
             var random = MainGame.Random;
 
             int x, y;
-        
-            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] {0, 3});
-            var positions =  entites.Where(z => ((Physics) z.Components[3]).IsCollidable == false).ToList();
-        
+
+            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
+            var positions = entites.Where(z => ((Physics)z.Components[3]).IsCollidable == false).ToList();
+
             while (true)
             {
-            
+
 
                 var entity = positions[random.Next(positions.Count)];
-                var position = (Position) positions[random.Next(positions.Count)].Components[0];
+                var position = (Position)positions[random.Next(positions.Count)].Components[0];
 
-            
+
                 if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
                 {
                     x = position.X;
                     y = position.Y;
                     break;
                 }
-            
+
                 positions.Remove(entity);
             }
 
-            return new Position() {X = x, Y = y};
+            return new Position() { X = x, Y = y };
         }
     }
 }

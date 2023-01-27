@@ -8,7 +8,7 @@ namespace game.GameEngine
 {
     public static class EcsManager
     {
-        private static IDictionary<Guid,Entity> _entities;
+        private static IDictionary<Guid, Entity> _entities;
         public static HashSet<Type> ComponentsTypes;
         public static int ComponentsCount => ComponentsTypes.Count;
         public static void Init()
@@ -24,6 +24,7 @@ namespace game.GameEngine
             ComponentsTypes.Add(typeof(Pathfinding));   //5
             ComponentsTypes.Add(typeof(Health));        //6
             ComponentsTypes.Add(typeof(Action));        //7
+            ComponentsTypes.Add(typeof(EntityStates));  //8
         }
 
         public static ICollection<Entity> QueryEntitiesByComponentsIndexes(int[] componentsIndexes)
@@ -39,10 +40,10 @@ namespace game.GameEngine
                     didMatchMask = false;
                     break;
                 }
-                if(didMatchMask)
+                if (didMatchMask)
                     entitiesThatMatchMask.Add(entity);
             }
-            
+
             //return entities
             return entitiesThatMatchMask;
         }
@@ -55,9 +56,9 @@ namespace game.GameEngine
             {
                 entity.Mask[componentsIndexes[i]] = true;
             }
-            
-            _entities.Add(entity.Guid,entity);
-            
+
+            _entities.Add(entity.Guid, entity);
+
 
             return entity;
         }
@@ -65,8 +66,8 @@ namespace game.GameEngine
         {
             var entity = new Entity();
 
-            _entities.Add(entity.Guid,entity);
-            
+            _entities.Add(entity.Guid, entity);
+
 
             return entity;
         }
@@ -103,8 +104,8 @@ namespace game.GameEngine
         {
             var entity = new Entity(guid);
 
-            _entities.Add(entity.Guid,entity);
-            
+            _entities.Add(entity.Guid, entity);
+
             return entity;
         }
     }

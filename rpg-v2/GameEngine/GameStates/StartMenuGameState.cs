@@ -14,7 +14,7 @@ namespace game.GameEngine.GameStates
     {
         private readonly InputManager _inputManager;
         private uint _selectPosition;
-        
+
         public void Draw(SpriteBatch spriteBatch)
         {
             var font = MainGame.FontSystem.GetFont(42);
@@ -36,7 +36,7 @@ namespace game.GameEngine.GameStates
         {
             _inputManager = new InputManager();
             _selectPosition = 0;
-            
+
             _inputManager.StartTrackingKey(Keys.Up, () =>
             {
                 if (_selectPosition <= 0)
@@ -47,8 +47,8 @@ namespace game.GameEngine.GameStates
                 {
                     _selectPosition--;
                 }
-            },true);
-            
+            }, true);
+
             _inputManager.StartTrackingKey(Keys.Down, () =>
             {
                 if (_selectPosition >= 4)
@@ -59,8 +59,8 @@ namespace game.GameEngine.GameStates
                 {
                     _selectPosition++;
                 }
-            },true);
-            
+            }, true);
+
             _inputManager.StartTrackingKey(Keys.W, () =>
             {
                 if (_selectPosition <= 0)
@@ -71,8 +71,8 @@ namespace game.GameEngine.GameStates
                 {
                     _selectPosition--;
                 }
-            },true);
-            
+            }, true);
+
             _inputManager.StartTrackingKey(Keys.S, () =>
             {
                 if (_selectPosition >= 4)
@@ -83,15 +83,15 @@ namespace game.GameEngine.GameStates
                 {
                     _selectPosition++;
                 }
-            },true);
-            
+            }, true);
+
             _inputManager.StartTrackingKey(Keys.Enter, () =>
             {
                 switch (_selectPosition)
                 {
                     case 0:
-                        
-                        Map.GenerateWallsAndFloors(MainGame.MapSize,MainGame.MapSize*20, MainGame.MapSize/10);
+
+                        Map.GenerateWallsAndFloors(MainGame.MapSize, MainGame.MapSize * 20, MainGame.MapSize / 10);
                         MainGame.CurrentGameState = new MapGameState();
                         break;
                     case 1:
@@ -104,12 +104,12 @@ namespace game.GameEngine.GameStates
 
                         break;
                 }
-            },true);
-            
+            }, true);
+
             _inputManager.StartTrackingKey(Keys.Escape, () =>
             {
                 Program.Game.Exit();
-            },false);
+            }, false);
 
         }
     }

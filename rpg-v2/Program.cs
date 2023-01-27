@@ -8,7 +8,7 @@ namespace rpg_v2
     {
 
         public static Game Game;
-        
+
         [STAThread]
         static void Main()
         {

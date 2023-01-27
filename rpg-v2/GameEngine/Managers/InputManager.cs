@@ -13,7 +13,7 @@ namespace game.GameEngine
         private List<Keys> _keysToRepeat;
 
         private double _timeForRepeatingKeys;
-        
+
         public InputManager()
         {
             _trackedKeysList = new List<Keys>();
@@ -28,14 +28,14 @@ namespace game.GameEngine
             //TODO: FIX MATCHING IF KEYS SHOULD REPEAT
             _trackedKeysList.Add(key);
             _actionsForKeys.Add(key, action);
-            _previousKeyStates.Add(key,KeyState.Down);
+            _previousKeyStates.Add(key, KeyState.Down);
             if (repeating)
             {
                 _keysToRepeat.Add(key);
             }
         }
 
-        public void CheckInputAndAct(GameTime gameTime)
+        public bool CheckInputAndAct(GameTime gameTime)
         {
             for (var index = 0; index < _trackedKeysList.Count; index++)
             {
@@ -44,19 +44,21 @@ namespace game.GameEngine
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
-                    return;
+                    return true;
                 }
-                
+
                 if (_keysToRepeat.Contains(key)
-                    && _previousKeyStates[key] == KeyState.Down 
+                    && _previousKeyStates[key] == KeyState.Down
                     && Keyboard.GetState().IsKeyDown(key)
                     && gameTime.TotalGameTime.TotalMilliseconds - _timeForRepeatingKeys > 250)
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public void UpdateStates(GameTime gameTime)

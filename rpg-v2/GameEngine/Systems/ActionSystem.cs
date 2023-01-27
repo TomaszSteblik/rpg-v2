@@ -9,10 +9,10 @@ public static class ActionSystem
 {
     public static void Act()
     {
-        var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] {7});
+        var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 7 });
         foreach (var entity in entities)
         {
-            var action = (Action) entity.Components[7];
+            var action = (Action)entity.Components[7];
             InvokeAction(entity.Guid, action);
         }
     }
