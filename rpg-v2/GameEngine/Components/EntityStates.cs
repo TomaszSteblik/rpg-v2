@@ -5,11 +5,11 @@ namespace game.GameEngine.Components;
 
 public class EntityStates : Component
 {
-    public List<IStateData> Data { get; set; }
+    public List<StateData> Data { get; set; }
 
     public EntityStates()
     {
-        Data = new List<IStateData>();
+        Data = new List<StateData>();
     }
 
 }
