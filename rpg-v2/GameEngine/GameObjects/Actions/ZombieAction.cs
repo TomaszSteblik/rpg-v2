@@ -61,7 +61,7 @@ public static class ZombieAction
                     pathfinding.Path[pathfinding.Step].Y == playerPosition.Y)
                 {
                     var playerHealth = (Health)MainGame.PlayerEntity.Components[6];
-                    playerHealth.Hp -= data.MeleeDamage;
+                    playerHealth.CurrentHp -= data.MeleeDamage;
                     Debug.WriteLine("player dmged");
                     var rollIfBleed = Random.Shared.Next(0, 100);
                     if (rollIfBleed <= 10)
