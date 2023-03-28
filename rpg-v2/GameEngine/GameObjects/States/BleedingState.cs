@@ -21,7 +21,7 @@ public class BleedingState : IState
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
 
         var health = (Health) entity.Components[6];
-        health.Hp -= bleedingData.TickDamage;
+        health.CurrentHp -= bleedingData.TickDamage;
     }
 
     public void Act(StateData data, Entity entity)
@@ -30,7 +30,7 @@ public class BleedingState : IState
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
 
         var health = (Health) entity.Components[6];
-        health.Hp -= bleedingData.TickDamage;
+        health.CurrentHp -= bleedingData.TickDamage;
 
         bleedingData.CurrentTick++;
 
