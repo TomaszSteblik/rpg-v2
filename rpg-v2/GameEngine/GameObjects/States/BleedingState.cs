@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using game.GameEngine.Components;
 using rpg_v2;
 
@@ -6,7 +7,7 @@ namespace game.GameEngine.GameObjects.States;
 
 public class BleedingState : IState
 {
-    public void OnCreate(IStateData data)
+    public void OnCreate(StateData data, Entity entity)
     {
         if (data is not BleedingData bleedingData)
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
@@ -14,19 +15,22 @@ public class BleedingState : IState
         bleedingData.Status = StateStatus.Active;
     }
 
-    public void OnDestruct(IStateData data)
+    public void OnDestruct(StateData data, Entity entity)
     {
         if (data is not BleedingData bleedingData)
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
-        bleedingData.Health.Hp -= bleedingData.TickDamage;
+
+        var health = (Health) entity.Components[6];
+        health.CurrentHp -= bleedingData.TickDamage;
     }
 
-    public void Act(IStateData data)
+    public void Act(StateData data, Entity entity)
     {
         if (data is not BleedingData bleedingData)
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
 
-        bleedingData.Health.Hp -= bleedingData.TickDamage;
+        var health = (Health) entity.Components[6];
+        health.CurrentHp -= bleedingData.TickDamage;
 
         bleedingData.CurrentTick++;
 
@@ -35,23 +39,20 @@ public class BleedingState : IState
     }
 }
 
-public class BleedingData : IStateData
+public class BleedingData : StateData
 {
-    public Health Health { get; }
     public int CurrentTick { get; set; }
     public int MaxTick { get; }
     public int TickDamage { get; }
 
-    public Type OwnerType => typeof(BleedingState);
-    public StateStatus Status { get; set; }
+    public override string OwnerType => typeof(BleedingState).ToString();
 
-    public BleedingData(Health health, int maxTick, int tickDamage)
+    public BleedingData(int maxTick, int tickDamage)
     {
-        Health = health;
         CurrentTick = 0;
         MaxTick = maxTick;
         TickDamage = tickDamage;
         Status = StateStatus.Created;
     }
-
+    
 }

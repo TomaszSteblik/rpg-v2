@@ -36,7 +36,7 @@ public class Zombie
         physics.IsCollidable = true;
         physics.BlocksVision = false;
         var health = (Health)zombie.Components[6];
-        health.Hp = 12;
+        health.CurrentHp = 12;
 
         var pathfinding = (Pathfinding)zombie.Components[5];
         var action = (Action)zombie.Components[7];

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using game.GameEngine.Components;
+using game.GameEngine.GameObjects.Items.Utility.Potions;
 using game.GameEngine.GameObjects.Npcs;
 using Microsoft.Xna.Framework;
 using rpg_v2;
@@ -27,7 +28,7 @@ namespace game.GameEngine
             var startingX = MainGame.Random.Next(1, size - 1);
             var startingY = MainGame.Random.Next(1, size - 1);
 
-            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8 });
+            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8, 9 });
 
             var position = (Position)MainGame.PlayerEntity.Components[0];
             var spriteP = (Sprite)MainGame.PlayerEntity.Components[1];
@@ -35,7 +36,8 @@ namespace game.GameEngine
             var physicsPlayer = (Physics)MainGame.PlayerEntity.Components[3];
             var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
             var playerHealth = (Health)MainGame.PlayerEntity.Components[6];
-            playerHealth.Hp = 30;
+            var playerInventory = (Inventory)MainGame.PlayerEntity.Components[9];
+            playerHealth.CurrentHp = 30;
             position.X = startingX;
             position.Y = startingY;
             spriteP.Color = Color.White;
@@ -46,6 +48,7 @@ namespace game.GameEngine
             physicsPlayer.IsCollidable = true;
             playerData.MeleeDamage = 4;
             playerData.IsPlayerCharacter = true;
+            playerInventory.Items.Add(new SmallHealthPotion());
 
             var currentColumn = startingX;
             var currentRow = startingY;

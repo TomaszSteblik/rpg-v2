@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using game.GameEngine.Components;
 using Action = game.GameEngine.Components.Action;
 
@@ -25,28 +26,12 @@ namespace game.GameEngine
             ComponentsTypes.Add(typeof(Health));        //6
             ComponentsTypes.Add(typeof(Action));        //7
             ComponentsTypes.Add(typeof(EntityStates));  //8
+            ComponentsTypes.Add(typeof(Inventory));  //8
+
         }
 
-        public static ICollection<Entity> QueryEntitiesByComponentsIndexes(int[] componentsIndexes)
-        {
-            var entitiesThatMatchMask = new Collection<Entity>();
-
-            foreach (var entity in _entities.Values)
-            {
-                var didMatchMask = true;
-                for (var i = 0; i < componentsIndexes.Length; i++)
-                {
-                    if (entity.Mask[componentsIndexes[i]]) continue;
-                    didMatchMask = false;
-                    break;
-                }
-                if (didMatchMask)
-                    entitiesThatMatchMask.Add(entity);
-            }
-
-            //return entities
-            return entitiesThatMatchMask;
-        }
+        public static IEnumerable<Entity> QueryEntitiesByComponentsIndexes(int[] componentsIndexes) =>
+            _entities.Values.Where(x => componentsIndexes.All(t => x.Mask[t]));
 
         public static Entity RegisterNewEntity(int[] componentsIndexes)
         {
