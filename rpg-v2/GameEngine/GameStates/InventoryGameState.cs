@@ -43,6 +43,9 @@ public class InventoryGameState : IGameState
 
     private void ConfirmSelection()
     {
+        if (_items.Count <= _selectPosition)
+            return;
+        
         var canUseResult = _items[_selectPosition].CanUse(MainGame.PlayerEntity);
         
         if (!canUseResult.CanUse)
