@@ -10,6 +10,7 @@ public class SmallHealthPotion : Item
 
     public int HealingAmount { get; init; }
     public override int Capacity => 3;
+    public override Rarity Rarity => Rarity.Common;
 
     public SmallHealthPotion()
     {

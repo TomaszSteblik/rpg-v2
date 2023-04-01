@@ -17,6 +17,15 @@ public class InventoryGameState : IGameState
     private int _selectPosition;
     private string _currentMessage = "";
 
+    private IDictionary<Rarity, Color> _colors = new Dictionary<Rarity, Color>()
+    {
+        {Rarity.Common,Color.White},
+        {Rarity.Uncommon,Color.LightBlue},
+        {Rarity.Rare,Color.Yellow},
+        {Rarity.Epic,Color.MediumPurple},
+        {Rarity.Legendary, Color.Orange}
+    };
+
     public InventoryGameState()
     {
         var playerInventory = (Inventory) MainGame.PlayerEntity.Components[9];
@@ -87,8 +96,8 @@ public class InventoryGameState : IGameState
         {
             var item = _items[index];
             yPosition += 42;
-            spriteBatch.DrawString(font, item.Name,
-                new Vector2(xPosition, yPosition), _selectPosition == index ? Color.Blue : Color.White);
+            spriteBatch.DrawString(font, _selectPosition == index ? $"> {item.Name}" : $"  {item.Name}",
+                new Vector2(xPosition, yPosition), _colors[item.Rarity]);
         }
     }
 

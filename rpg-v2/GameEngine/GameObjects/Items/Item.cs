@@ -11,4 +11,14 @@ public abstract class Item
     public abstract CanUseResult CanUse(Entity entity);
     public abstract void Use(Entity entity);
     public abstract int Capacity { get; }
+    public abstract Rarity Rarity { get; }
+}
+
+public enum Rarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary
 }
