@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using rpg_v2.Utils;
 
 namespace rpg_v2
 {
@@ -97,6 +98,13 @@ namespace rpg_v2
             _spriteBatch.Draw(_gamertRenderTarget2D, _destinationScalingRectangle, Color.White);
             _spriteBatch.DrawString(_font18, $"{_frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(_font18, $"{(GC.GetTotalMemory(false) / 1000000.0):F2}  MB", new Vector2(0, 18), Color.White);
+
+            var position = 36;
+            foreach (var @event in InMemorySomSink.Instance.Events)
+            {
+                _spriteBatch.DrawString(_font18, $"{@event.RenderMessage()}", new Vector2(0, position), Color.White);
+                position += 18;
+            }
             _spriteBatch.End();
 
 

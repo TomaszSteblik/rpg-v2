@@ -1,9 +1,7 @@
-﻿using System;
-using game.GameEngine;
+﻿using game.GameEngine;
 using Microsoft.Xna.Framework;
 using rpg_v2.Utils;
 using Serilog;
-using Serilog.Sinks.File;
 
 namespace rpg_v2
 {

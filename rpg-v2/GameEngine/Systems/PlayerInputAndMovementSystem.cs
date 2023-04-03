@@ -8,6 +8,7 @@ using game.GameEngine.GameStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using rpg_v2;
+using Serilog;
 
 namespace game.GameEngine.Systems
 {
@@ -119,6 +120,7 @@ namespace game.GameEngine.Systems
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
                     enemyHealth.CurrentHp -= playerData.MeleeDamage;
+                    Log.Information("Player hit smth");
                 }
 
             }, true);
