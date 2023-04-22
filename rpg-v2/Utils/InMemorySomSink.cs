@@ -28,14 +28,14 @@ namespace rpg_v2.Utils
         {
             _textFormatter = textFormatter;
         }
-        
+
         public static InMemorySomSink Instance => LocalInstance.Value ?? (LocalInstance.Value = new InMemorySomSink());
 
         public IEnumerable<string> Events => _logEvents;
 
         public void Emit(LogEvent logEvent)
         {
-            if (_logEvents.Count >= MaxEventsCount) 
+            if (_logEvents.Count >= MaxEventsCount)
                 _logEvents.Remove(_logEvents[^1]);
 
             using var buffer = new StringWriter();
@@ -74,7 +74,7 @@ namespace rpg_v2.Utils
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
-            
+
             InMemorySomSink.Instance.SetFormatter(formatter);
 
             return sinkConfiguration.Sink(InMemorySomSink.Instance, restrictedToMinimumLevel, levelSwitch);

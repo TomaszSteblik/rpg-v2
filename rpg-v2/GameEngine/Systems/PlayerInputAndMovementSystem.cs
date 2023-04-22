@@ -129,7 +129,7 @@ namespace game.GameEngine.Systems
             {
                 MainGame.CurrentGameState = new SaveMenuState();
             });
-            
+
             InputManager.StartTrackingKey(Keys.I, () =>
             {
                 MainGame.CurrentGameState = new InventoryGameState();

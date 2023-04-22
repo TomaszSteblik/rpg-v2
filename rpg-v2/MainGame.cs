@@ -45,7 +45,7 @@ namespace rpg_v2
             IsFixedTimeStep = false;
             _destinationScalingRectangle = new Rectangle(0, 0, MapSize * TileSize, MapSize * TileSize);
         }
-        
+
         protected override void Initialize()
         {
             _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, MapSize * TileSize, MapSize * TileSize);
