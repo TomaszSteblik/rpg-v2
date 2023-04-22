@@ -20,7 +20,7 @@ public class BleedingState : IState
         if (data is not BleedingData bleedingData)
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
 
-        var health = (Health) entity.Components[6];
+        var health = (Health)entity.Components[6];
         health.CurrentHp -= bleedingData.TickDamage;
     }
 
@@ -29,7 +29,7 @@ public class BleedingState : IState
         if (data is not BleedingData bleedingData)
             throw new Exception($"Incorrect data passed to Bleeding: {data}");
 
-        var health = (Health) entity.Components[6];
+        var health = (Health)entity.Components[6];
         health.CurrentHp -= bleedingData.TickDamage;
 
         bleedingData.CurrentTick++;
@@ -54,5 +54,5 @@ public class BleedingData : StateData
         TickDamage = tickDamage;
         Status = StateStatus.Created;
     }
-    
+
 }

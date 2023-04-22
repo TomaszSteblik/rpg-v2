@@ -14,12 +14,12 @@ public class SmallHealthPotion : Item
 
     public SmallHealthPotion()
     {
-        HealingAmount = Random.Shared.Next(1,4);
+        HealingAmount = Random.Shared.Next(1, 4);
     }
 
     public override CanUseResult CanUse(Entity entity)
     {
-        var health = (Health) entity.Components[6];
+        var health = (Health)entity.Components[6];
         return health.CurrentHp < health.MaxHp
             ? new CanUseResult(true)
             : new CanUseResult(false, "Current hp need to be below max hp");
@@ -27,7 +27,7 @@ public class SmallHealthPotion : Item
 
     public override void Use(Entity entity)
     {
-        var health = (Health) entity.Components[6];
+        var health = (Health)entity.Components[6];
         health.CurrentHp += HealingAmount;
     }
 }

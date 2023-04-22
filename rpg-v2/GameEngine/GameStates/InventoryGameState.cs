@@ -28,12 +28,12 @@ public class InventoryGameState : IGameState
 
     public InventoryGameState()
     {
-        var playerInventory = (Inventory) MainGame.PlayerEntity.Components[9];
+        var playerInventory = (Inventory)MainGame.PlayerEntity.Components[9];
         _items = playerInventory.Items;
-        
+
         _inputManager = new InputManager();
         _selectPosition = 0;
-        
+
         _inputManager.StartTrackingKey(Keys.Up, MoveSelectUp, true);
 
         _inputManager.StartTrackingKey(Keys.Down, MoveSelectDown, true);
@@ -54,15 +54,15 @@ public class InventoryGameState : IGameState
     {
         if (_items.Count <= _selectPosition)
             return;
-        
+
         var canUseResult = _items[_selectPosition].CanUse(MainGame.PlayerEntity);
-        
+
         if (!canUseResult.CanUse)
         {
             _currentMessage = canUseResult.ErrorMessage ?? "UNKNOWN ERROR WHILE USING ITEM";
             return;
         }
-        
+
         _items[_selectPosition].Use(MainGame.PlayerEntity);
         _currentMessage = $"Used: {_items[_selectPosition].Name}";
         _items.RemoveAt(_selectPosition);
@@ -83,15 +83,15 @@ public class InventoryGameState : IGameState
         else
             _selectPosition--;
     }
-    
+
     public void Draw(SpriteBatch spriteBatch)
     {
         var font = MainGame.FontSystem.GetFont(22);
         const int xPosition = 120;
         var yPosition = 300;
-        
-        spriteBatch.DrawString(font, _currentMessage,new Vector2(xPosition, yPosition-84), Color.White);
-        
+
+        spriteBatch.DrawString(font, _currentMessage, new Vector2(xPosition, yPosition - 84), Color.White);
+
         for (var index = 0; index < _items.Count; index++)
         {
             var item = _items[index];
