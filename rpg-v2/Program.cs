@@ -14,7 +14,7 @@ namespace rpg_v2
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Debug()
-                .WriteTo.Sink(InMemorySomSink.Instance)
+                .WriteTo.InMemorySom()
                 .CreateLogger();
             EcsManager.Init();
             using (Game = new MainGame())

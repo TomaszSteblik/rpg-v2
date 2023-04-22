@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using rpg_v2.Utils;
+using Serilog;
 
 namespace rpg_v2
 {
@@ -44,9 +45,7 @@ namespace rpg_v2
             IsFixedTimeStep = false;
             _destinationScalingRectangle = new Rectangle(0, 0, MapSize * TileSize, MapSize * TileSize);
         }
-
-        private int smth => 3024 / 1964;
-
+        
         protected override void Initialize()
         {
             _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, MapSize * TileSize, MapSize * TileSize);
@@ -99,10 +98,11 @@ namespace rpg_v2
             _spriteBatch.DrawString(_font18, $"{_frameRate:F2}  FPS", new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(_font18, $"{(GC.GetTotalMemory(false) / 1000000.0):F2}  MB", new Vector2(0, 18), Color.White);
 
+
             var position = 36;
             foreach (var @event in InMemorySomSink.Instance.Events)
             {
-                _spriteBatch.DrawString(_font18, $"{@event.RenderMessage()}", new Vector2(0, position), Color.White);
+                _spriteBatch.DrawString(_font18, $"{@event}", new Vector2(1000, position), Color.White);
                 position += 18;
             }
             _spriteBatch.End();
