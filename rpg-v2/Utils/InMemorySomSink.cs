@@ -12,12 +12,12 @@ using Serilog.Formatting.Display;
 
 namespace rpg_v2.Utils
 {
-    public class InMemorySomSink : ILogEventSink, IDisposable
+    public sealed class InMemorySomSink : ILogEventSink, IDisposable
     {
         private static readonly AsyncLocal<InMemorySomSink> LocalInstance = new AsyncLocal<InMemorySomSink>();
         private List<string> _logEvents;
         private const int MaxEventsCount = 32;
-        private ITextFormatter _textFormatter;
+        private ITextFormatter? _textFormatter;
 
         private InMemorySomSink()
         {
@@ -37,6 +37,9 @@ namespace rpg_v2.Utils
         {
             if (_logEvents.Count >= MaxEventsCount)
                 _logEvents.Remove(_logEvents[^1]);
+            
+            if(_textFormatter is null)
+                return;
 
             using var buffer = new StringWriter();
             _textFormatter.Format(logEvent, buffer);
@@ -56,8 +59,8 @@ namespace rpg_v2.Utils
             this LoggerSinkConfiguration sinkConfiguration,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
             string outputTemplate = DefaultDebugOutputTemplate,
-            IFormatProvider formatProvider = null,
-            LoggingLevelSwitch levelSwitch = null)
+            IFormatProvider? formatProvider = null,
+            LoggingLevelSwitch? levelSwitch = null)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
             if (outputTemplate == null) throw new ArgumentNullException(nameof(outputTemplate));
@@ -70,7 +73,7 @@ namespace rpg_v2.Utils
             this LoggerSinkConfiguration sinkConfiguration,
             ITextFormatter formatter,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-            LoggingLevelSwitch levelSwitch = null)
+            LoggingLevelSwitch? levelSwitch = null)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
