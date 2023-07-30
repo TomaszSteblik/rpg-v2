@@ -140,7 +140,7 @@ jobs:
           apt-get install -y dotnet-sdk-7.0
       - run: |
           apt update -y
-          apt install openjdk-17-jdk -y
+          apt install ca-certificates-java openjdk-17-jdk -y
           dotnet tool install --global dotnet-sonarscanner
           export PATH="$PATH:/root/.dotnet/tools"
           dotnet sonarscanner begin /k:"TomaszSteblik_rpg-v2" /o:"tomaszsteblik" /d:sonar.login="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io"
