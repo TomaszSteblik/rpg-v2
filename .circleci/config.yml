@@ -2,7 +2,7 @@ version: 2.1
 executors:
   net-executor7:
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk
+      - image: mcr.microsoft.com/dotnet/sdk:7.0
 
   net-executor3:
     docker:
