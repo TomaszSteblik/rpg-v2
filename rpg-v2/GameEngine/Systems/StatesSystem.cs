@@ -14,19 +14,19 @@ public static class StatesSystem
             var states = (EntityStates)entity.Components[8];
             foreach (var stateData in states.Data)
             {
-                var state = Activator.CreateInstance(stateData.OwnerType) as IState ??
+                var state = Activator.CreateInstance(Type.GetType(stateData.OwnerType) ?? throw new ArgumentException()) as IState ??
                             throw new Exception("Failed to create state");
 
                 switch (stateData.Status)
                 {
                     case StateStatus.Created:
-                        state.OnCreate(stateData);
+                        state.OnCreate(stateData, entity);
                         break;
                     case StateStatus.Active:
-                        state.Act(stateData);
+                        state.Act(stateData, entity);
                         break;
                     case StateStatus.Destructed:
-                        state.OnDestruct(stateData);
+                        state.OnDestruct(stateData, entity);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

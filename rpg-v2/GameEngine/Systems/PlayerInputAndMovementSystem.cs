@@ -8,6 +8,7 @@ using game.GameEngine.GameStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using rpg_v2;
+using Serilog;
 
 namespace game.GameEngine.Systems
 {
@@ -37,7 +38,7 @@ namespace game.GameEngine.Systems
                 {
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
-                    enemyHealth.Hp -= playerData.MeleeDamage;
+                    enemyHealth.CurrentHp -= playerData.MeleeDamage;
                 }
 
             }, true);
@@ -64,7 +65,7 @@ namespace game.GameEngine.Systems
                 {
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
-                    enemyHealth.Hp -= playerData.MeleeDamage;
+                    enemyHealth.CurrentHp -= playerData.MeleeDamage;
                 }
 
             }, true);
@@ -91,7 +92,7 @@ namespace game.GameEngine.Systems
                 {
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
-                    enemyHealth.Hp -= playerData.MeleeDamage;
+                    enemyHealth.CurrentHp -= playerData.MeleeDamage;
                 }
 
             }, true);
@@ -118,7 +119,8 @@ namespace game.GameEngine.Systems
                 {
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
-                    enemyHealth.Hp -= playerData.MeleeDamage;
+                    enemyHealth.CurrentHp -= playerData.MeleeDamage;
+                    Log.Information("Player hit smth");
                 }
 
             }, true);
@@ -126,6 +128,11 @@ namespace game.GameEngine.Systems
             InputManager.StartTrackingKey(Keys.S, () =>
             {
                 MainGame.CurrentGameState = new SaveMenuState();
+            });
+
+            InputManager.StartTrackingKey(Keys.I, () =>
+            {
+                MainGame.CurrentGameState = new InventoryGameState();
             });
         }
 

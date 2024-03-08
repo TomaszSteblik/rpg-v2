@@ -71,25 +71,17 @@ public class LoadMenuState : IGameState
     private void MoveSelectDown()
     {
         if (_selectPosition >= _saveFiles.Length - 1)
-        {
             _selectPosition = 0;
-        }
         else
-        {
             _selectPosition++;
-        }
     }
 
     private void MoveSelectUp()
     {
         if (_selectPosition <= 0)
-        {
             _selectPosition = _saveFiles.Length - 1;
-        }
         else
-        {
             _selectPosition--;
-        }
     }
 
     private void DeleteSelection()

@@ -2,6 +2,14 @@
 {
     public class Health : Component
     {
-        public float Hp { get; set; }
+        private float _currentHp;
+
+        public float CurrentHp
+        {
+            get => _currentHp;
+            set => _currentHp = value % (MaxHp + 1);
+        }
+
+        public float MaxHp { get; set; } = 30f;
     }
 }
