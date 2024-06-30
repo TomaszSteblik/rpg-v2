@@ -134,6 +134,11 @@ namespace game.GameEngine.Systems
             {
                 MainGame.CurrentGameState = new InventoryGameState();
             });
+
+            InputManager.StartTrackingKey(Keys.Escape, () =>
+            {
+                MainGame.CurrentGameState = new InGameMenuGameState();
+            });
         }
 
         public static bool Act(GameTime gameTime)
