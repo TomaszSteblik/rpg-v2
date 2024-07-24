@@ -18,6 +18,9 @@ public abstract class MenuBaseGameState : IGameState
 
     private void GoUp()
     {
+        if (!Actions.Any())
+            throw new ArgumentNullException(nameof(Actions), "Actions cannot be empty.");
+        
         if (SelectPosition <= 0)
         {
             SelectPosition = (uint)Actions.Count - 1;
@@ -30,6 +33,9 @@ public abstract class MenuBaseGameState : IGameState
 
     private void GoDown()
     {
+        if (!Actions.Any())
+            throw new ArgumentNullException(nameof(Actions), "Actions cannot be empty.");
+        
         if (SelectPosition >= (uint)Actions.Count - 1)
         {
             SelectPosition = 0;
