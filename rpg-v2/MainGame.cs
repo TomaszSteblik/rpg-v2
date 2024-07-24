@@ -57,7 +57,7 @@ namespace rpg_v2
 
             CurrentGameState = new StartMenuGameState();
 
-            SoundManager.Play();
+            SoundManager.PlayBackgroundMusic();
 
             base.Initialize();
         }
