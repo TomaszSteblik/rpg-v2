@@ -24,8 +24,6 @@ public static class SettingsParser
             
             if (!File.Exists(path))
                 SaveSettings(new T());
-
-            var z = new SoundsSettings();
             
             using var stream = File.Open(path, FileMode.OpenOrCreate);
             var settings = JsonSerializer.Deserialize<T>(stream);
