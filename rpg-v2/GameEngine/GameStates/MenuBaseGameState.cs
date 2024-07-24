@@ -13,17 +13,14 @@ namespace game.GameEngine.GameStates;
 public abstract class MenuBaseGameState : IGameState
 {
     protected readonly InputManager InputManager;
-    protected uint SelectPosition;
+    protected int SelectPosition;
     protected abstract List<(Action Action, Func<string> Name)> Actions { get; }
 
     private void GoUp()
     {
-        if (!Actions.Any())
-            throw new ArgumentNullException(nameof(Actions), "Actions cannot be empty.");
-        
         if (SelectPosition <= 0)
         {
-            SelectPosition = (uint)Actions.Count - 1;
+            SelectPosition = Actions.Count - 1;
         }
         else
         {
@@ -33,10 +30,7 @@ public abstract class MenuBaseGameState : IGameState
 
     private void GoDown()
     {
-        if (!Actions.Any())
-            throw new ArgumentNullException(nameof(Actions), "Actions cannot be empty.");
-        
-        if (SelectPosition >= (uint)Actions.Count - 1)
+        if (SelectPosition >= Actions.Count - 1)
         {
             SelectPosition = 0;
         }
