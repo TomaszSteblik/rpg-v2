@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace game.GameEngine.Shared.Configuration;
 
-public record struct SoundsSettings()
-    : ISettings
+public record struct SoundsSettings : ISettings
 {
     public uint BackgroundMusicVolume { get; init; } = 5;
 
