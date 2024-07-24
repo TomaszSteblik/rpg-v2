@@ -11,14 +11,14 @@ public static class SettingsParser
     private static readonly string SettingsPath = 
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SourceOfMagic", "Settings");
 
-    private static object _lock = new object();
+    private static readonly object Lock = new object();
     
     public delegate void OnSettingsChangeHandler();
     public static event OnSettingsChangeHandler? OnSettingsChange;
 
     public static T GetSettings<T>() where T: struct, ISettings
     {
-        lock (_lock)
+        lock (Lock)
         {
             var path = Path.Combine(SettingsPath, $"{typeof(T).Name}.json");
             
@@ -36,7 +36,7 @@ public static class SettingsParser
 
     public static void SaveSettings<T>(T settings) where T: struct, ISettings
     {
-        lock (_lock)
+        lock (Lock)
         {
             var json = JsonSerializer.Serialize(settings);
             var path = Path.Combine(SettingsPath, $"{typeof(T).Name}.json");
