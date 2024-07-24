@@ -40,9 +40,9 @@ public class SettingsMenu : MenuBaseGameState
         return builder.ToString();
     }
 
-    protected override List<(Action Action, Func<string> Name)> Actions => new List<(Action Action, Func<string> Name)>
+    protected override List<(Action Action, Func<string> Name)> Actions => new()
     {
-        (() => { return; }, GetBackgroundMusicVolumeText)
+        (() => { }, GetBackgroundMusicVolumeText)
     };
     
     protected override void OnEscape() => MainGame.CurrentGameState = _previousGameState;
