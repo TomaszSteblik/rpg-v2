@@ -42,7 +42,7 @@ public abstract class MenuBaseGameState : IGameState
 
     private void Select()
     {
-        Actions.ElementAt((int) SelectPosition).Action.Invoke();
+        Actions[SelectPosition].Action.Invoke();
     }
 
     protected abstract void OnEscape();
