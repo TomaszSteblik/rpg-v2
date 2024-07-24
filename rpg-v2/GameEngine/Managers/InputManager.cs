@@ -40,7 +40,7 @@ namespace game.GameEngine
             for (var index = 0; index < _trackedKeysList.Count; index++)
             {
                 var key = _trackedKeysList[index];
-                if (_previousKeyStates[key] == KeyState.Up && Keyboard.GetState().IsKeyDown(key))
+                if (_previousKeyStates[key] is KeyState.Up && Keyboard.GetState().IsKeyDown(key))
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();

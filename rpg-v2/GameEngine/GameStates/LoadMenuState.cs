@@ -35,7 +35,7 @@ public class LoadMenuState : IGameState
         _inputManager.UpdateStates(gameTime);
     }
 
-    public LoadMenuState()
+    public LoadMenuState(IGameState previousGameState)
     {
         _inputManager = new InputManager();
         _selectPosition = 0;
@@ -57,7 +57,7 @@ public class LoadMenuState : IGameState
 
         _inputManager.StartTrackingKey(Keys.Enter, ConfirmSelection);
 
-        _inputManager.StartTrackingKey(Keys.Escape, () => MainGame.CurrentGameState = new StartMenuGameState());
+        _inputManager.StartTrackingKey(Keys.Escape, () => MainGame.CurrentGameState = previousGameState);
 
         _inputManager.StartTrackingKey(Keys.R, DeleteSelection, false);
     }
