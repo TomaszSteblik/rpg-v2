@@ -98,7 +98,7 @@ namespace game.GameEngine.GameStates
                         MainGame.CurrentGameState = new LoadMenuState(this);
                         break;
                     case 2:
-                        MainGame.CurrentGameState = new SettingsMenu(this);
+                        MainGame.CurrentGameState = new SettingsMenu(new StartMenuGameState());
                         break;
                     case 4:
                         Program.Game.Exit();

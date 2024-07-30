@@ -11,7 +11,7 @@ public class InGameMenuGameState : MenuBaseGameState
         {
             (() => MainGame.CurrentGameState = new SaveMenuState(),() => "Save game"),
             (() => MainGame.CurrentGameState = new LoadMenuState(this),() => "Load game"),
-            (() => MainGame.CurrentGameState = new SettingsMenu(this),() => "Settings"),
+            (() => MainGame.CurrentGameState = new SettingsMenu(new InGameMenuGameState()),() => "Settings"),
             (() => MainGame.CurrentGameState = new MapGameState(),() => "Go back"),
             (() => Program.Game.Exit(),() => "Exit to desktop")
         };
