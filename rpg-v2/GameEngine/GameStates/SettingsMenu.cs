@@ -15,20 +15,50 @@ public class SettingsMenu : MenuBaseGameState
         _previousGameState = previousGameState;
         InputManager.StartTrackingKey(Keys.Left, () =>
         {
-            if(SelectPosition != 0 || SoundManager.BackgroundMusicVolume <= 0)
-                return;
-            
-            SoundManager.BackgroundMusicVolume -= 1;
-            
+            switch (SelectPosition)
+            {
+                case 0 when SoundManager.BackgroundMusicVolume != 0:
+                    SoundManager.BackgroundMusicVolume -= 1;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == 30:
+                    VideoManager.FpsTargetCap = int.MaxValue;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == 60:
+                    VideoManager.FpsTargetCap = 30;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == 120:
+                    VideoManager.FpsTargetCap = 60;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == int.MaxValue:
+                    VideoManager.FpsTargetCap = 120;
+                    break;
+                default:
+                    return;
+            }
         }, true);
         
         InputManager.StartTrackingKey(Keys.Right, () =>
         {
-            if(SelectPosition != 0 || SoundManager.BackgroundMusicVolume >= 10)
-                return;
-
-            SoundManager.BackgroundMusicVolume += 1;
-
+            switch (SelectPosition)
+            {
+                case 0 when SoundManager.BackgroundMusicVolume < 10:
+                    SoundManager.BackgroundMusicVolume += 1;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == 30:
+                    VideoManager.FpsTargetCap = 60;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == 60:
+                    VideoManager.FpsTargetCap = 120;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == 120:
+                    VideoManager.FpsTargetCap = int.MaxValue;
+                    break;
+                case 1 when VideoManager.FpsTargetCap == int.MaxValue:
+                    VideoManager.FpsTargetCap = 30;
+                    break;
+                default:
+                    return;
+            }
         }, true);
     }
 
@@ -39,10 +69,13 @@ public class SettingsMenu : MenuBaseGameState
         builder.Append($"Background music volume: {volume}/10");
         return builder.ToString();
     }
+    
+    public static string GetFpsTargetCapText() => $"FPS: {(VideoManager.FpsTargetCap == int.MaxValue ? "UNLIMITED" : VideoManager.FpsTargetCap)}";
 
     protected override List<(Action Action, Func<string> Name)> Actions => new()
     {
-        (() => { }, GetBackgroundMusicVolumeText)
+        (() => { }, GetBackgroundMusicVolumeText),
+        (() => { }, GetFpsTargetCapText)
     };
     
     protected override void OnEscape() => MainGame.CurrentGameState = _previousGameState;
