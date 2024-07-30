@@ -42,7 +42,7 @@ namespace rpg_v2
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             _graphics.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;
+            //IsFixedTimeStep = false;
             _destinationScalingRectangle = new Rectangle(0, 0, MapSize * TileSize, MapSize * TileSize);
         }
 
@@ -54,6 +54,7 @@ namespace rpg_v2
             _graphics.ApplyChanges();
             EcsManager.Init();
             SoundManager.Init(Content);
+            VideoManager.Init(_graphics);
 
             CurrentGameState = new StartMenuGameState();
 
