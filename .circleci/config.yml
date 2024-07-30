@@ -154,16 +154,13 @@ workflows:
       - analyse-code:
           context: SONAR
 
-  weekly:
-    triggers: #use the triggers key to indicate a scheduled build
-      - schedule:
-          cron: "0 12 * * 1" # use cron syntax to set the schedule
+  release:
+    jobs:
+      - tests:
           filters:
             branches:
               only:
                 - master
-    jobs:
-      - tests
       - build-mac:
           requires:
             - tests
@@ -178,6 +175,10 @@ workflows:
             - build-mac
             - build-win
             - build-linux
+          filters:
+            branches:
+              only:
+                - master
       - publish-github-release:
           context: GITHUB_CREDS
           requires:
