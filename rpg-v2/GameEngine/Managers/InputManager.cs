@@ -40,7 +40,8 @@ namespace game.GameEngine
             for (var index = 0; index < _trackedKeysList.Count; index++)
             {
                 var key = _trackedKeysList[index];
-                if (_previousKeyStates[key] is KeyState.Up && Keyboard.GetState().IsKeyDown(key))
+                var keyboardState = Keyboard.GetState();
+                if (_previousKeyStates[key] is KeyState.Up && keyboardState.IsKeyDown(key))
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
@@ -50,7 +51,8 @@ namespace game.GameEngine
                 if (_keysToRepeat.Contains(key)
                     && _previousKeyStates[key] == KeyState.Down
                     && Keyboard.GetState().IsKeyDown(key)
-                    && gameTime.TotalGameTime.TotalMilliseconds - _timeForRepeatingKeys > 250)
+                    && gameTime.TotalGameTime.TotalMilliseconds - _timeForRepeatingKeys >
+                    (keyboardState.IsKeyDown(Keys.LeftShift) ? 50 : 250))
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
