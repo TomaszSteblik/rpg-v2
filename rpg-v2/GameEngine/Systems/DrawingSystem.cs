@@ -60,7 +60,7 @@ namespace game.GameEngine.Systems
                 else
                 {
                     spriteBatch.Draw(MainGame.SpriteAtlas, new Vector2(position.X * 16, position.Y * 16),
-                        new Rectangle(11 * 16, 13 * 16, 16, 16), Color.Black);
+                        new Rectangle(11 * 16, 13 * 16, 16, 16), Color.Beige);
                 }
 
             }

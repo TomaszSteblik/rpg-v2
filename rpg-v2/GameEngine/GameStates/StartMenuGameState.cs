@@ -91,7 +91,7 @@ namespace game.GameEngine.GameStates
                 {
                     case 0:
 
-                        Map.GenerateWallsAndFloors(MainGame.MapSize, MainGame.MapSize * 20, MainGame.MapSize / 10);
+                        Map.GenerateWallsAndFloors(MainGame.MapHeight,MainGame.MapWidth, MainGame.MapHeight * 20, MainGame.MapWidth / 10);
                         MainGame.CurrentGameState = new MapGameState();
                         break;
                     case 1:

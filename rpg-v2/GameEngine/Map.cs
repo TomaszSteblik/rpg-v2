@@ -13,20 +13,20 @@ namespace game.GameEngine
     public static class Map
     {
 
-        public static void GenerateWallsAndFloors(int size, int tunnels, int maxLength)
+        public static void GenerateWallsAndFloors(int width, int height, int tunnels, int maxLength)
         {
-            var map = new bool[size][];
-            for (var i = 0; i < size; i++)
+            var map = new bool[width][];
+            for (var i = 0; i < width; i++)
             {
-                map[i] = new bool[size];
+                map[i] = new bool[height];
                 for (var j = 0; j < map[i].Length; j++)
                 {
                     map[i][j] = true;
                 }
             }
 
-            var startingX = MainGame.Random.Next(1, size - 1);
-            var startingY = MainGame.Random.Next(1, size - 1);
+            var startingX = MainGame.Random.Next(1, height - 1);
+            var startingY = MainGame.Random.Next(1, width - 1);
 
             MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8, 9 });
 
@@ -79,15 +79,13 @@ namespace game.GameEngine
                 var randomLength = MainGame.Random.Next(1, maxLength);
                 var tunnelLength = 0;
 
-
-                var sizeMOne = size - 2;
-
+                
                 while (tunnelLength < randomLength)
                 {
                     if (((currentRow == 1) && (randomDirection[0] == -1)) ||
                         ((currentColumn == 1) && (randomDirection[1] == -1)) ||
-                        ((currentRow >= sizeMOne) && (randomDirection[0] == 1)) ||
-                        ((currentColumn >= sizeMOne) && (randomDirection[1] == 1)))
+                        ((currentRow >= width - 2) && (randomDirection[0] == 1)) ||
+                        ((currentColumn >= height - 2) && (randomDirection[1] == 1)))
                     {
                         break;
                     }
@@ -104,7 +102,7 @@ namespace game.GameEngine
             }
 
 
-            for (var i = 0; i < size; i++)
+            for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < map[i].Length; j++)
                 {

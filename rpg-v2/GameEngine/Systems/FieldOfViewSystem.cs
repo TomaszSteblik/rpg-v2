@@ -37,7 +37,7 @@ namespace game.GameEngine.Systems
 
             for (var i = 0; i < vision.CellsInLightOfSight.Length; i++)
             {
-                for (var j = 0; j < vision.CellsInLightOfSight.Length; j++)
+                for (var j = 0; j < vision.CellsInLightOfSight[i].Length; j++)
                 {
                     vision.CellsInLightOfSight[i][j] = false;
                 }
@@ -69,7 +69,7 @@ namespace game.GameEngine.Systems
                         var deltaY = j * yy + i * yx;
                         var deltaX = i * xx + j * xy;
 
-                        if (deltaX + startX < 0 || startY + deltaY < 0 || deltaX + startX >= vision.ArraySize || startY + deltaY >= vision.ArraySize)
+                        if (deltaX + startX < 0 || startY + deltaY < 0 || deltaX + startX >= vision.ArrayHeight || startY + deltaY >= vision.ArrayWidth)
                             continue;
 
                         var doesBlockingEntityExist = Entities.ContainsKey(new Position() { X = deltaX + startX, Y = startY + deltaY });

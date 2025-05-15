@@ -24,6 +24,8 @@ namespace rpg_v2
         public static Texture2D SpriteAtlas { get; set; }
         public static FontSystem FontSystem;
         public static int MapSize { get; set; } = 60;
+        public static int MapHeight => 45;
+        public static int MapWidth => 80;
         public static Entity PlayerEntity;
 
         public static IGameState CurrentGameState { get; set; }
@@ -33,7 +35,7 @@ namespace rpg_v2
 
         private double _frameRate = 0;
         private SpriteFontBase _font18;
-        private readonly Rectangle _destinationScalingRectangle;
+        private Rectangle _destinationScalingRectangle;
         private RenderTarget2D _gamertRenderTarget2D;
 
         public MainGame()
@@ -43,12 +45,13 @@ namespace rpg_v2
             IsMouseVisible = true;
             _graphics.SynchronizeWithVerticalRetrace = false;
             //IsFixedTimeStep = false;
-            _destinationScalingRectangle = new Rectangle(0, 0, MapSize * TileSize, MapSize * TileSize);
         }
 
         protected override void Initialize()
         {
-            _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, MapSize * TileSize, MapSize * TileSize);
+            _destinationScalingRectangle = new Rectangle((GraphicsDevice.DisplayMode.Width / 2) - (MapWidth * TileSize / 2),
+                (GraphicsDevice.DisplayMode.Height / 2) - MapHeight * TileSize /2, MapWidth * TileSize, MapHeight * TileSize);
+            _gamertRenderTarget2D = new RenderTarget2D(GraphicsDevice, MapWidth * TileSize, MapHeight * TileSize);
             _graphics.HardwareModeSwitch = false;
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
@@ -89,7 +92,7 @@ namespace rpg_v2
             _spriteBatch.Begin();
             GraphicsDevice.SetRenderTarget(_gamertRenderTarget2D);
             CurrentGameState.Draw(_spriteBatch);
-
+            GraphicsDevice.Clear(Color.DarkSlateGray);
             _spriteBatch.End();
 
             _spriteBatch.Begin();
