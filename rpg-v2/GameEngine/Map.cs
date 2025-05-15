@@ -162,14 +162,20 @@ namespace game.GameEngine
 
         }
 
-        public static Position GetRandomNotOccupiedPosition()
+        public static Position GetRandomNotOccupiedPosition(int searchRange = Int32.MaxValue , int x = 0 , int y = 0)
         {
             var random = MainGame.Random;
-
-            int x, y;
-
+            
             var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
-            var positions = entites.Where(z => ((Physics)z.Components[3]).IsCollidable == false).ToList();
+            var positions = entites
+                .Where(
+                    z => ((Physics)z.Components[3]).IsCollidable == false &&
+                         ((Position)z.Components[0]).X > x - searchRange &&
+                         ((Position)z.Components[0]).X < x + searchRange &&
+                         ((Position)z.Components[0]).Y > y - searchRange &&
+                         ((Position)z.Components[0]).Y < y + searchRange
+                    )
+                .ToList();
 
             while (true)
             {
@@ -177,19 +183,16 @@ namespace game.GameEngine
 
                 var entity = positions[random.Next(positions.Count)];
                 var position = (Position)positions[random.Next(positions.Count)].Components[0];
-
-
+                
                 if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
                 {
-                    x = position.X;
-                    y = position.Y;
-                    break;
+                    return new Position() { X = position.X, Y = position.Y };
                 }
 
                 positions.Remove(entity);
             }
 
-            return new Position() { X = x, Y = y };
+            
         }
     }
 }

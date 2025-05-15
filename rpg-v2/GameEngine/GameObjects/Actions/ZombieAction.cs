@@ -30,7 +30,7 @@ public static class ZombieAction
             {
                 pathfinding.NeedToFindNewPath = true;
 
-                var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
+                var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition(10, pos.X, pos.Y);
 
                 pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
                 pathfinding.TargetY = isPlayerVisible ? playerPosition.Y : randomPositionTargetLambda.Y;
@@ -75,7 +75,7 @@ public static class ZombieAction
                 {
                     pathfinding.NeedToFindNewPath = true;
 
-                    var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition();
+                    var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition(10, pos.X, pos.Y);
 
                     pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
                     pathfinding.TargetY = isPlayerVisible ? playerPosition.Y : randomPositionTargetLambda.Y;
