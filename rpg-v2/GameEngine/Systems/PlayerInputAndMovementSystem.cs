@@ -39,6 +39,8 @@ namespace game.GameEngine.Systems
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
                     enemyHealth.CurrentHp -= playerData.MeleeDamage;
+                    Log.Information("Player hit smth");
+
                 }
 
             }, true);
@@ -66,6 +68,8 @@ namespace game.GameEngine.Systems
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
                     enemyHealth.CurrentHp -= playerData.MeleeDamage;
+                    Log.Information("Player hit smth");
+
                 }
 
             }, true);
@@ -93,6 +97,8 @@ namespace game.GameEngine.Systems
                     var enemyHealth = (Health)entity.Components[6];
                     var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
                     enemyHealth.CurrentHp -= playerData.MeleeDamage;
+                    Log.Information("Player hit smth");
+
                 }
 
             }, true);

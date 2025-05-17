@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using game.GameEngine.Components;
 using game.GameEngine.GameObjects.Items.Utility.Potions;
 using game.GameEngine.GameObjects.Npcs;
+using game.GameEngine.Systems.Helpers;
 using Microsoft.Xna.Framework;
 using rpg_v2;
+using Serilog;
 using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine
@@ -13,20 +16,21 @@ namespace game.GameEngine
     public static class Map
     {
 
-        public static void GenerateWallsAndFloors(int size, int tunnels, int maxLength)
+        public static void GenerateWallsAndFloors(int width, int height, int tunnels, int maxLength)
         {
-            var map = new bool[size][];
-            for (var i = 0; i < size; i++)
+            // Use the full map size instead of the function parameters
+            var map = new bool[width][];
+            for (var i = 0; i < width; i++)
             {
-                map[i] = new bool[size];
+                map[i] = new bool[height];
                 for (var j = 0; j < map[i].Length; j++)
                 {
                     map[i][j] = true;
                 }
             }
 
-            var startingX = MainGame.Random.Next(1, size - 1);
-            var startingY = MainGame.Random.Next(1, size - 1);
+            var startingX = MainGame.Random.Next(1, height - 1);
+            var startingY = MainGame.Random.Next(1, width - 1);
 
             MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8, 9 });
 
@@ -79,15 +83,13 @@ namespace game.GameEngine
                 var randomLength = MainGame.Random.Next(1, maxLength);
                 var tunnelLength = 0;
 
-
-                var sizeMOne = size - 2;
-
+                
                 while (tunnelLength < randomLength)
                 {
                     if (((currentRow == 1) && (randomDirection[0] == -1)) ||
                         ((currentColumn == 1) && (randomDirection[1] == -1)) ||
-                        ((currentRow >= sizeMOne) && (randomDirection[0] == 1)) ||
-                        ((currentColumn >= sizeMOne) && (randomDirection[1] == 1)))
+                        ((currentRow >= width - 2) && (randomDirection[0] == 1)) ||
+                        ((currentColumn >= height - 2) && (randomDirection[1] == 1)))
                     {
                         break;
                     }
@@ -104,7 +106,7 @@ namespace game.GameEngine
             }
 
 
-            for (var i = 0; i < size; i++)
+            for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < map[i].Length; j++)
                 {
@@ -144,54 +146,38 @@ namespace game.GameEngine
                     }
                 }
             }
-
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-
+            
+            for (int i = 0; i < 100; i++)
+            {
+                Zombie.GenerateOnRandomPosition();
+            }
+            Log.Information("Game started");
         }
 
         public static bool IsPositionOccupiedByCollidableEntity(int x, int y)
         {
-            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
+            var positions = EcsQueries.GetCollidablePositions();
 
-            return entites.Any(z => ((Position)z.Components[0]).X == x
-                                    && ((Position)z.Components[0]).Y == y
-                                    && ((Physics)z.Components[3]).IsCollidable == true);
-
+            for (int i = 0; i < positions.Length; i++)
+            {
+                if (positions[i].X == x && positions[i].Y == y) return true;
+            }
+            
+            return false;
         }
 
-        public static Position GetRandomNotOccupiedPosition()
+        public static Position GetRandomNotOccupiedPosition(int searchRange = Int32.MaxValue , int x = 0 , int y = 0)
         {
-            var random = MainGame.Random;
-
-            int x, y;
-
-            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
-            var positions = entites.Where(z => ((Physics)z.Components[3]).IsCollidable == false).ToList();
-
-            while (true)
-            {
-
-
-                var entity = positions[random.Next(positions.Count)];
-                var position = (Position)positions[random.Next(positions.Count)].Components[0];
-
-
-                if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
-                {
-                    x = position.X;
-                    y = position.Y;
-                    break;
-                }
-
-                positions.Remove(entity);
-            }
-
-            return new Position() { X = x, Y = y };
+            var positions = EcsQueries.GetFreePositions()
+                .Where(
+                    z => 
+                         z.X > x - searchRange &&
+                         z.X < x + searchRange &&
+                         z.Y > y - searchRange &&
+                         z.Y < y + searchRange).ToArray();
+            var chosen = positions[MainGame.Random.Next(positions.Length)];
+            return chosen;
+            
         }
     }
 }

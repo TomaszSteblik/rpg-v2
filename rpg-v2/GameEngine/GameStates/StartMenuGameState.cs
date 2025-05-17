@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -85,13 +86,13 @@ namespace game.GameEngine.GameStates
                 }
             }, true);
 
-            _inputManager.StartTrackingKey(Keys.Enter, () =>
+            _inputManager.StartTrackingKey(Keys.Enter, async () =>
             {
                 switch (_selectPosition)
                 {
                     case 0:
-
-                        Map.GenerateWallsAndFloors(MainGame.MapSize, MainGame.MapSize * 20, MainGame.MapSize / 10);
+                        //TODO: Loading screen
+                        await Task.Run(() => Map.GenerateWallsAndFloors(MainGame.MapSize, MainGame.MapSize, MainGame.MapSize * 20, MainGame.MapWidth / 10));
                         MainGame.CurrentGameState = new MapGameState();
                         break;
                     case 1:

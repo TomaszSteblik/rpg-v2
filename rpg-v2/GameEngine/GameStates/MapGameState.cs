@@ -14,15 +14,19 @@ namespace game.GameEngine.GameStates
 
         public void Update(GameTime gameTime)
         {
+            // Update camera to follow player
+            
             if (playerActed)
             {
+                CameraSystem.Update();
                 StatesSystem.Act();
                 HealthSystem.Act();
             }
-
+        
             playerActed = PlayerInputAndMovementSystem.Act(gameTime);
             if (playerActed)
             {
+                CameraSystem.Update();
                 ActionSystem.Act();
                 PathfindingSystem.Act();
                 FieldOfViewSystem.Act();
@@ -32,6 +36,7 @@ namespace game.GameEngine.GameStates
 
         public MapGameState()
         {
+            CameraSystem.Update();
             FieldOfViewSystem.Act();
             PathfindingSystem.Act();
         }

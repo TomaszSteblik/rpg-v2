@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using game.GameEngine.Components;
 using rpg_v2;
 
@@ -15,14 +16,13 @@ namespace game.GameEngine.Systems
                 .Where(x => ((Physics)x.Components[3]).BlocksVision)
                 .ToDictionary(entity => entity.Components[0] as Position);
 
-            foreach (var entity in EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 4 }))
+            var entitesWithFov = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 4 });
+            
+            Parallel.ForEach(entitesWithFov, entity =>
             {
                 UpdateFieldOfView((Position)entity.Components[0], (Vision)entity.Components[4]);
-            }
 
-
-
-
+            });
         }
 
         public static void UpdateFieldOfView(Position position, Vision vision)
@@ -37,7 +37,7 @@ namespace game.GameEngine.Systems
 
             for (var i = 0; i < vision.CellsInLightOfSight.Length; i++)
             {
-                for (var j = 0; j < vision.CellsInLightOfSight.Length; j++)
+                for (var j = 0; j < vision.CellsInLightOfSight[i].Length; j++)
                 {
                     vision.CellsInLightOfSight[i][j] = false;
                 }
@@ -69,7 +69,7 @@ namespace game.GameEngine.Systems
                         var deltaY = j * yy + i * yx;
                         var deltaX = i * xx + j * xy;
 
-                        if (deltaX + startX < 0 || startY + deltaY < 0 || deltaX + startX >= vision.ArraySize || startY + deltaY >= vision.ArraySize)
+                        if (deltaX + startX < 0 || startY + deltaY < 0 || deltaX + startX >= vision.ArrayHeight || startY + deltaY >= vision.ArrayWidth)
                             continue;
 
                         var doesBlockingEntityExist = Entities.ContainsKey(new Position() { X = deltaX + startX, Y = startY + deltaY });
@@ -125,7 +125,5 @@ namespace game.GameEngine.Systems
                 }
             }
         }
-
-
     }
 }

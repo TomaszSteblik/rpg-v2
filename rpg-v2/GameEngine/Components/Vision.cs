@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using rpg_v2;
+using System;
 
 namespace game.GameEngine.Components
 {
@@ -9,12 +10,15 @@ namespace game.GameEngine.Components
         public bool[][] CellsInLightOfSight { get; set; }
         public int Sight { get; set; }
         public int ArraySize { get; set; }
+        public int ArrayWidth { get; set; }
+        public int ArrayHeight { get; set; }
 
         public Vision()
         {
             Sight = 5;
             VisitedCells = new bool[MainGame.MapSize][];
-            ArraySize = MainGame.MapSize;
+            ArrayWidth = MainGame.MapSize;
+            ArrayHeight = MainGame.MapSize;
             CellsInLightOfSight = new bool[MainGame.MapSize][];
             for (var i = 0; i < VisitedCells.Length; i++)
             {
