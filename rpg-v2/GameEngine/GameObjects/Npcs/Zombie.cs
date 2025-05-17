@@ -4,6 +4,7 @@ using game.GameEngine.Components;
 using game.GameEngine.Systems.Helpers;
 using Microsoft.Xna.Framework;
 using rpg_v2;
+using Serilog;
 using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine.GameObjects.Npcs;
@@ -21,7 +22,7 @@ public class Zombie
         //register zombie
         var zombie = EcsManager.RegisterNewEntity(new[] { 0, 1, 2, 3, 4, 5, 6, 7 });
 
-        Debug.WriteLine($"Zombie position: x: {x} y: {y}");
+        Log.Debug("New Zombie ({EntityId}) position: x: {X} y: {Y}", zombie.Guid, x, y);
 
         var pos = (Position)zombie.Components[0];
         pos.X = x;

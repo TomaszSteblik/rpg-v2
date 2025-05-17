@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using game.GameEngine.Components;
 using rpg_v2;
 
@@ -15,10 +16,13 @@ namespace game.GameEngine.Systems
                 .Where(x => ((Physics)x.Components[3]).BlocksVision)
                 .ToDictionary(entity => entity.Components[0] as Position);
 
-            foreach (var entity in EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 4 }))
+            var entitesWithFov = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 4 });
+            
+            Parallel.ForEach(entitesWithFov, entity =>
             {
                 UpdateFieldOfView((Position)entity.Components[0], (Vision)entity.Components[4]);
-            }
+
+            });
 
 
 
@@ -125,7 +129,5 @@ namespace game.GameEngine.Systems
                 }
             }
         }
-
-
     }
 }

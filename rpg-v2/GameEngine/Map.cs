@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using game.GameEngine.Components;
 using game.GameEngine.GameObjects.Items.Utility.Potions;
 using game.GameEngine.GameObjects.Npcs;
+using game.GameEngine.Systems.Helpers;
 using Microsoft.Xna.Framework;
 using rpg_v2;
+using Serilog;
 using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine
@@ -15,6 +18,7 @@ namespace game.GameEngine
 
         public static void GenerateWallsAndFloors(int width, int height, int tunnels, int maxLength)
         {
+            // Use the full map size instead of the function parameters
             var map = new bool[width][];
             for (var i = 0; i < width; i++)
             {
@@ -142,56 +146,68 @@ namespace game.GameEngine
                     }
                 }
             }
-
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-            Zombie.GenerateOnRandomPosition();
-
+            
+            for (int i = 0; i < 100; i++)
+            {
+                Zombie.GenerateOnRandomPosition();
+            }
+            Log.Information("Game started");
         }
 
         public static bool IsPositionOccupiedByCollidableEntity(int x, int y)
         {
-            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
+            var positions = EcsQueries.GetCollidablePositions();
 
-            return entites.Any(z => ((Position)z.Components[0]).X == x
-                                    && ((Position)z.Components[0]).Y == y
-                                    && ((Physics)z.Components[3]).IsCollidable == true);
-
+            for (int i = 0; i < positions.Length; i++)
+            {
+                if (positions[i].X == x && positions[i].Y == y) return true;
+            }
+            
+            return false;
         }
 
         public static Position GetRandomNotOccupiedPosition(int searchRange = Int32.MaxValue , int x = 0 , int y = 0)
         {
             var random = MainGame.Random;
+
+            // var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 }).ToImmutableArray();
+            //
+            // var freePositions = entities
             
-            var entites = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 });
-            var positions = entites
+            //     .Select(x=> ((Position)x.Components[0]))
+            //     .ToHashSet();
+            //
+            // var occupiedPositions = entities
+            //     .Where(z => ((Physics)z.Components[3]).IsCollidable == true)
+            //     .Select(x=> ((Position)x.Components[0]))
+            //     .ToHashSet();
+            //
+            // var toChoose = freePositions.Except(occupiedPositions).ToArray();
+
+            // while (true)
+            // {
+            //
+            //
+            //     var entity = freePositions[random.Next(freePositions.Count)];
+            //     var position = (Position)freePositions[random.Next(freePositions.Count)].Components[0];
+            //     
+            //     if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
+            //     {
+            //         return new Position() { X = position.X, Y = position.Y };
+            //     }
+            //
+            //     freePositions.Remove(entity);
+            // }
+            
+            var positions = EcsQueries.GetFreePositions()
                 .Where(
-                    z => ((Physics)z.Components[3]).IsCollidable == false &&
-                         ((Position)z.Components[0]).X > x - searchRange &&
-                         ((Position)z.Components[0]).X < x + searchRange &&
-                         ((Position)z.Components[0]).Y > y - searchRange &&
-                         ((Position)z.Components[0]).Y < y + searchRange
-                    )
-                .ToList();
-
-            while (true)
-            {
-
-
-                var entity = positions[random.Next(positions.Count)];
-                var position = (Position)positions[random.Next(positions.Count)].Components[0];
-                
-                if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
-                {
-                    return new Position() { X = position.X, Y = position.Y };
-                }
-
-                positions.Remove(entity);
-            }
-
+                    z => 
+                         z.X > x - searchRange &&
+                         z.X < x + searchRange &&
+                         z.Y > y - searchRange &&
+                         z.Y < y + searchRange).ToArray();
+            var chosen = positions[random.Next(positions.Length)];
+            return chosen;
             
         }
     }

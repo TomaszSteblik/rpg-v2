@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using FontStashSharp;
 using game.GameEngine;
 using game.GameEngine.Components;
@@ -23,7 +25,7 @@ namespace rpg_v2
         public static Random Random = new Random();
         public static Texture2D SpriteAtlas { get; set; }
         public static FontSystem FontSystem;
-        public static int MapSize { get; set; } = 60;
+        public static int MapSize { get; set; } = 200;  // Changed from 60 to 200
         public static int MapHeight => 45;
         public static int MapWidth => 80;
         public static Entity PlayerEntity;
@@ -44,7 +46,7 @@ namespace rpg_v2
         private float _scaleX;
         private float _scaleY;
         private Matrix _scaleMatrix;
-        private const int BorderWidth = 128;  // Width of the black border in pixels
+        private const int BorderWidth = 0;  // Width of the black border in pixels
 
         public MainGame()
         {
@@ -61,7 +63,7 @@ namespace rpg_v2
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.HardwareModeSwitch = false;
-            _graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             
             // Initialize virtual screen rendering
@@ -164,9 +166,9 @@ namespace rpg_v2
             _spriteBatch.Begin(transformMatrix: _scaleMatrix);
             _spriteBatch.DrawString(_font18, $"{_frameRate:F2}  FPS", new Vector2(10, 10), Color.White);
             _spriteBatch.DrawString(_font18, $"{(GC.GetTotalMemory(false) / 1000000.0):F2}  MB", new Vector2(10, 40), Color.White);
-        
-            var position = 70;
-            foreach (var @event in InMemorySomSink.Instance.Events)
+            _spriteBatch.DrawString(_font18, $"{((Position)MainGame.PlayerEntity?.Components[0])?.X}, {((Position)MainGame.PlayerEntity?.Components[0])?.Y}", new Vector2(10, 70), Color.White);
+            var position = 110;
+            foreach (var @event in InMemorySomSink.Instance.Events.ToImmutableArray())
             {
                 _spriteBatch.DrawString(_font18, $"{@event}", new Vector2(10, position), Color.White);
                 position += 30;

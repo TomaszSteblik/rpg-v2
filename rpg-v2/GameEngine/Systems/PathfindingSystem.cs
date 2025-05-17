@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using game.GameEngine.Components;
+using rpg_v2;
+using Serilog;
 
 namespace game.GameEngine.Systems
 {
@@ -11,30 +15,42 @@ namespace game.GameEngine.Systems
         public static void Act()
         {
             var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 5 });
-            foreach (var entity in entities)
+            var positions = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 })
+                .Where(x => ((Physics)x.Components[3]).IsCollidable is false)
+                .Select(x => (((Position)x.Components[0]).X, ((Position)x.Components[0]).Y))
+                .ToHashSet()
+                .Except(
+                    EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 })
+                        .Where(x => ((Physics)x.Components[3]).IsCollidable)
+                        .Select(x => (((Position)x.Components[0]).X, ((Position)x.Components[0]).Y))
+                        .ToHashSet()
+                    )
+                .Append((((Position)MainGame.PlayerEntity.Components[0]).X, ((Position)MainGame.PlayerEntity.Components[0]).Y))
+                    .ToHashSet();
+            
+            Parallel.ForEach(entities, entity =>
             {
                 var pathfindingComponent = (Pathfinding)entity.Components[5];
 
                 if (pathfindingComponent.NeedToFindNewPath is false)
-                    continue;
+                    return;
 
                 var position = (Position)entity.Components[0];
 
                 var didFindPath = FindPath(position.X, position.Y,
                     pathfindingComponent.TargetX, pathfindingComponent.TargetY,
-                    out var foudPath);
+                    out var foudPath, positions);
 
                 if (didFindPath is false)
                 {
-                    Debug.WriteLine($"Failed to find path to X: {pathfindingComponent.TargetX} Y: {pathfindingComponent.TargetY}");
-                    continue;
+                    Log.Debug("Failed to find path for {EntityId} to X:{TargetX} Y:{TargetY}, from X:{CurrentX} Y: {CurrentY}", entity.Guid, pathfindingComponent.TargetX, pathfindingComponent.TargetY, position.X, position.Y);
+                    return;
                 }
-                Debug.WriteLine("Succeded to find path");
+                Log.Debug("Succeded to find path for {EntityId} to X:{TargetX} Y:{TargetY}, from X:{CurrentX} Y: {CurrentY}", entity.Guid, pathfindingComponent.TargetX, pathfindingComponent.TargetY, position.X, position.Y);
                 pathfindingComponent.Path = foudPath;
                 pathfindingComponent.Step = 0;
                 pathfindingComponent.NeedToFindNewPath = false;
-
-            }
+            });
         }
 
         [Description("Returns distance between two nodes, using pitagoras theorem")]
@@ -45,7 +61,7 @@ namespace game.GameEngine.Systems
 
         [Description("Returns true if can return out var list of nodes(path) from starting node to destination node, " +
                      "returns false if can't reach destination")]
-        public static bool FindPath(int startX, int startY, int destX, int destY, out List<Node> path)
+        public static bool FindPath(int startX, int startY, int destX, int destY, out List<Node> path, HashSet<(int, int)> positions)
         {
             var empty = new Node(-1, -1);
             var goal = new Node(destX, destY);
@@ -60,7 +76,9 @@ namespace game.GameEngine.Systems
                 var current = frontier.Dequeue();
                 if (current.Equals(goal))
                     break;
-                var nexts = current.FindNeighbours();
+                var nexts = current.FindNeighbours(positions);
+                if (nexts.Any())
+                    ;
                 for (int i = 0; i < nexts.Count; i++)
                 {
                     if (!cameFrom.ContainsKey(nexts[i]))

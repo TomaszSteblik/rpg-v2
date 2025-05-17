@@ -4,6 +4,7 @@ using game.GameEngine.Components;
 using game.GameEngine.GameObjects.States;
 using game.GameEngine.Systems.Helpers;
 using rpg_v2;
+using Serilog;
 using Action = game.GameEngine.Components.Action;
 
 namespace game.GameEngine.GameObjects.Actions;
@@ -29,11 +30,12 @@ public static class ZombieAction
             if (pathfinding.Step >= pathfinding.Path.Count)
             {
                 pathfinding.NeedToFindNewPath = true;
-
-                var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition(10, pos.X, pos.Y);
+                var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition(100, pos.X, pos.Y);
 
                 pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
                 pathfinding.TargetY = isPlayerVisible ? playerPosition.Y : randomPositionTargetLambda.Y;
+                Log.Debug("{EntityId}: Need to find new path to X:{TargetX} Y:{TargetY}, from X:{CurrentX} Y: {CurrentY}", entityGuid, pathfinding.TargetX, pathfinding.TargetY, pos.X, pos.Y);
+
                 return;
             }
 
@@ -51,8 +53,9 @@ public static class ZombieAction
 
                 pos.X = pathfinding.Path[pathfinding.Step].X;
                 pos.Y = pathfinding.Path[pathfinding.Step].Y;
-                pathfinding.Step++;
+                Log.Debug("{EntityId}: Moved to X:{TargetX} Y:{TargetY}, from X:{CurrentX} Y: {CurrentY}", entityGuid, pathfinding.Path[pathfinding.Step].X, pathfinding.Path[pathfinding.Step].Y, pos.X, pos.Y);
 
+                pathfinding.Step++;
 
             }
             else
@@ -62,20 +65,21 @@ public static class ZombieAction
                 {
                     var playerHealth = (Health)MainGame.PlayerEntity.Components[6];
                     playerHealth.CurrentHp -= data.MeleeDamage;
-                    Debug.WriteLine("player dmged");
+                    Log.Information("player dmged");
                     var rollIfBleed = Random.Shared.Next(0, 100);
                     if (rollIfBleed <= 10)
                     {
                         var playerStates = (EntityStates)MainGame.PlayerEntity.Components[8];
                         playerStates.Data.Add(new BleedingData(Random.Shared.Next(3, 5), 1));
-                        Debug.WriteLine("zombie applied bleed to player");
+                        Log.Information("zombie applied bleed to player");
                     }
                 }
                 else
                 {
                     pathfinding.NeedToFindNewPath = true;
+                    Log.Debug("ZombieAction: Need to find new path");
 
-                    var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition(10, pos.X, pos.Y);
+                    var randomPositionTargetLambda = Map.GetRandomNotOccupiedPosition(100, pos.X, pos.Y);
 
                     pathfinding.TargetX = isPlayerVisible ? playerPosition.X : randomPositionTargetLambda.X;
                     pathfinding.TargetY = isPlayerVisible ? playerPosition.Y : randomPositionTargetLambda.Y;

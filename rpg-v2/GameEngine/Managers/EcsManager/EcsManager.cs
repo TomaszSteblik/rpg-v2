@@ -9,6 +9,8 @@ namespace game.GameEngine
 {
     public static class EcsManager
     {
+        private static ulong _version = ulong.MinValue;
+        public static ulong Version => _version;
         private static IDictionary<Guid, Entity> _entities;
         public static HashSet<Type> ComponentsTypes;
         public static int ComponentsCount => ComponentsTypes.Count;
@@ -44,7 +46,7 @@ namespace game.GameEngine
 
             _entities.Add(entity.Guid, entity);
 
-
+            _version += 1;
             return entity;
         }
         public static Entity RegisterNewEntity()
@@ -53,12 +55,13 @@ namespace game.GameEngine
 
             _entities.Add(entity.Guid, entity);
 
-
+            _version += 1;
             return entity;
         }
 
         public static void UnregisterEntity(Entity entity)
         {
+            _version += 1;
             _entities.Remove(entity.Guid);
         }
 
@@ -90,7 +93,7 @@ namespace game.GameEngine
             var entity = new Entity(guid);
 
             _entities.Add(entity.Guid, entity);
-
+            _version += 1;
             return entity;
         }
     }
