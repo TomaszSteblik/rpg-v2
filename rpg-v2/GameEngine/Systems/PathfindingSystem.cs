@@ -77,8 +77,6 @@ namespace game.GameEngine.Systems
                 if (current.Equals(goal))
                     break;
                 var nexts = current.FindNeighbours(positions);
-                if (nexts.Any())
-                    ;
                 for (int i = 0; i < nexts.Count; i++)
                 {
                     if (!cameFrom.ContainsKey(nexts[i]))

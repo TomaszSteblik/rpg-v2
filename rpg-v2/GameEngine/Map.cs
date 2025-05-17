@@ -168,37 +168,6 @@ namespace game.GameEngine
 
         public static Position GetRandomNotOccupiedPosition(int searchRange = Int32.MaxValue , int x = 0 , int y = 0)
         {
-            var random = MainGame.Random;
-
-            // var entities = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 }).ToImmutableArray();
-            //
-            // var freePositions = entities
-            
-            //     .Select(x=> ((Position)x.Components[0]))
-            //     .ToHashSet();
-            //
-            // var occupiedPositions = entities
-            //     .Where(z => ((Physics)z.Components[3]).IsCollidable == true)
-            //     .Select(x=> ((Position)x.Components[0]))
-            //     .ToHashSet();
-            //
-            // var toChoose = freePositions.Except(occupiedPositions).ToArray();
-
-            // while (true)
-            // {
-            //
-            //
-            //     var entity = freePositions[random.Next(freePositions.Count)];
-            //     var position = (Position)freePositions[random.Next(freePositions.Count)].Components[0];
-            //     
-            //     if (Map.IsPositionOccupiedByCollidableEntity(position.X, position.Y) is false)
-            //     {
-            //         return new Position() { X = position.X, Y = position.Y };
-            //     }
-            //
-            //     freePositions.Remove(entity);
-            // }
-            
             var positions = EcsQueries.GetFreePositions()
                 .Where(
                     z => 
@@ -206,7 +175,7 @@ namespace game.GameEngine
                          z.X < x + searchRange &&
                          z.Y > y - searchRange &&
                          z.Y < y + searchRange).ToArray();
-            var chosen = positions[random.Next(positions.Length)];
+            var chosen = positions[MainGame.Random.Next(positions.Length)];
             return chosen;
             
         }

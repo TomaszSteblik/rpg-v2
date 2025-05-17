@@ -30,18 +30,13 @@ namespace game.GameEngine.GameStates
                 ActionSystem.Act();
                 PathfindingSystem.Act();
                 FieldOfViewSystem.Act();
-                
-                // Update camera position after player moves
-                CameraSystem.Update();
             }
 
         }
 
         public MapGameState()
         {
-            // Initialize camera position to follow player
             CameraSystem.Update();
-            
             FieldOfViewSystem.Act();
             PathfindingSystem.Act();
         }

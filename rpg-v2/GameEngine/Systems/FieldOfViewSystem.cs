@@ -23,10 +23,6 @@ namespace game.GameEngine.Systems
                 UpdateFieldOfView((Position)entity.Components[0], (Vision)entity.Components[4]);
 
             });
-
-
-
-
         }
 
         public static void UpdateFieldOfView(Position position, Vision vision)
