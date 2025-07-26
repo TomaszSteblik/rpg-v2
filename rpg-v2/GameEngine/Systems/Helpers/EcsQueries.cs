@@ -41,4 +41,15 @@ public static class EcsQueries
         
         return _freePositions;
     }
+    
+    public static Entity[] GetEntitiesAtPosition(int x, int y)
+    {
+        return EcsManager.QueryEntitiesByComponentsIndexes(new[] { EcsConsts.ECS_COMPONENT_INDEX_POSITION })
+            .Where(entity => 
+            {
+                var position = (Position)entity.Components[EcsConsts.ECS_COMPONENT_INDEX_POSITION];
+                return position.X == x && position.Y == y;
+            })
+            .ToArray();
+    }
 }

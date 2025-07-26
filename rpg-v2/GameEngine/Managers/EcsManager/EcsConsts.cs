@@ -12,4 +12,5 @@ public static class EcsConsts
     public const int ECS_COMPONENT_INDEX_ACTION = 7;
     public const int ECS_COMPONENT_INDEX_ENTITYSTATES = 8;
     public const int ECS_COMPONENT_INDEX_INVENTORY = 9;
+    public const int ECS_COMPONENT_INDEX_MANA = 10;
 }

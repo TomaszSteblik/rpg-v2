@@ -29,7 +29,7 @@ namespace game.GameEngine
             ComponentsTypes.Add(typeof(Action));        //7
             ComponentsTypes.Add(typeof(EntityStates));  //8
             ComponentsTypes.Add(typeof(Inventory));     //9
-
+            ComponentsTypes.Add(typeof(Mana));          //10
         }
 
         public static IEnumerable<Entity> QueryEntitiesByComponentsIndexes(int[] componentsIndexes) =>
