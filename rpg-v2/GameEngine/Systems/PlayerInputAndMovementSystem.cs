@@ -139,7 +139,6 @@ namespace game.GameEngine.Systems
             InputManager.StartTrackingKey(Keys.I, () =>
             {
                 MainGame.CurrentGameState = new InventoryGameState(MainGame.CurrentGameState);
-                InputManager.RestartTracking();
             });
 
             InputManager.StartTrackingKey(Keys.Escape, () =>
