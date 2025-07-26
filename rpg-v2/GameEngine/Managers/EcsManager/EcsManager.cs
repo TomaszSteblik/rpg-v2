@@ -28,7 +28,7 @@ namespace game.GameEngine
             ComponentsTypes.Add(typeof(Health));        //6
             ComponentsTypes.Add(typeof(Action));        //7
             ComponentsTypes.Add(typeof(EntityStates));  //8
-            ComponentsTypes.Add(typeof(Inventory));  //8
+            ComponentsTypes.Add(typeof(Inventory));     //9
 
         }
 
