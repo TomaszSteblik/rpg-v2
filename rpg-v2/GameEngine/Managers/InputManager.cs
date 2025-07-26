@@ -9,7 +9,10 @@ namespace game.GameEngine
     {
         private List<Keys> _trackedKeysList;
         private Dictionary<Keys, Action> _actionsForKeys;
-        private Dictionary<Keys, KeyState> _previousKeyStates;
+        
+        //make this static to keep track of key states across different instances (game states) because there is always
+        //only one Keyboard and its state should always be reflected correctly
+        private static readonly Dictionary<Keys, KeyState> PreviousKeyStates = new();
         private List<Keys> _keysToRepeat;
 
         private double _timeForRepeatingKeys;
@@ -18,7 +21,6 @@ namespace game.GameEngine
         {
             _trackedKeysList = new List<Keys>();
             _actionsForKeys = new Dictionary<Keys, Action>();
-            _previousKeyStates = new Dictionary<Keys, KeyState>();
             _keysToRepeat = new List<Keys>();
             _timeForRepeatingKeys = 0;
         }
@@ -28,7 +30,7 @@ namespace game.GameEngine
             //TODO: FIX MATCHING IF KEYS SHOULD REPEAT
             _trackedKeysList.Add(key);
             _actionsForKeys.Add(key, action);
-            _previousKeyStates.Add(key, KeyState.Down);
+            PreviousKeyStates.TryAdd(key, KeyState.Down);
             if (repeating)
             {
                 _keysToRepeat.Add(key);
@@ -41,7 +43,7 @@ namespace game.GameEngine
             {
                 var key = _trackedKeysList[index];
                 var keyboardState = Keyboard.GetState();
-                if (_previousKeyStates[key] is KeyState.Up && keyboardState.IsKeyDown(key))
+                if (PreviousKeyStates[key] is KeyState.Up && keyboardState.IsKeyDown(key))
                 {
                     _timeForRepeatingKeys = gameTime.TotalGameTime.TotalMilliseconds;
                     _actionsForKeys[key].Invoke();
@@ -49,7 +51,7 @@ namespace game.GameEngine
                 }
 
                 if (_keysToRepeat.Contains(key)
-                    && _previousKeyStates[key] == KeyState.Down
+                    && PreviousKeyStates[key] == KeyState.Down
                     && Keyboard.GetState().IsKeyDown(key)
                     && gameTime.TotalGameTime.TotalMilliseconds - _timeForRepeatingKeys >
                     (keyboardState.IsKeyDown(Keys.LeftShift) ? 50 : 250))
@@ -68,7 +70,7 @@ namespace game.GameEngine
             for (var index = 0; index < _trackedKeysList.Count; index++)
             {
                 var key = _trackedKeysList[index];
-                _previousKeyStates[key] = Keyboard.GetState()[key];
+                PreviousKeyStates[key] = Keyboard.GetState()[key];
             }
         }
     }
