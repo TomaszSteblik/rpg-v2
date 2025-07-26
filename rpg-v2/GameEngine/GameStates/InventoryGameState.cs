@@ -16,6 +16,7 @@ public class InventoryGameState : IGameState
     private readonly InputManager _inputManager;
     private int _selectPosition;
     private string _currentMessage = "";
+    private readonly IGameState _previousGameState;
 
     private IDictionary<Rarity, Color> _colors = new Dictionary<Rarity, Color>()
     {
@@ -26,8 +27,9 @@ public class InventoryGameState : IGameState
         {Rarity.Legendary, Color.Orange}
     };
 
-    public InventoryGameState()
+    public InventoryGameState(IGameState previousGameState)
     {
+        _previousGameState = previousGameState;
         var playerInventory = (Inventory)MainGame.PlayerEntity.Components[9];
         _items = playerInventory.Items;
 

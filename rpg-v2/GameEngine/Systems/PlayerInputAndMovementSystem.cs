@@ -14,7 +14,7 @@ namespace game.GameEngine.Systems
 {
     public static class PlayerInputAndMovementSystem
     {
-        private static InputManager InputManager = new InputManager();
+        private static readonly InputManager InputManager = new InputManager();
         static PlayerInputAndMovementSystem()
         {
             InputManager.StartTrackingKey(Keys.Left, () =>
@@ -138,7 +138,8 @@ namespace game.GameEngine.Systems
 
             InputManager.StartTrackingKey(Keys.I, () =>
             {
-                MainGame.CurrentGameState = new InventoryGameState();
+                MainGame.CurrentGameState = new InventoryGameState(MainGame.CurrentGameState);
+                InputManager.RestartTracking();
             });
 
             InputManager.StartTrackingKey(Keys.Escape, () =>

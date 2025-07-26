@@ -35,6 +35,14 @@ namespace game.GameEngine
             }
         }
 
+        public void RestartTracking()
+        {
+            foreach (var key in _trackedKeysList)
+            {
+                _previousKeyStates[key] = KeyState.Down;
+            }            
+        }
+
         public bool CheckInputAndAct(GameTime gameTime)
         {
             for (var index = 0; index < _trackedKeysList.Count; index++)
