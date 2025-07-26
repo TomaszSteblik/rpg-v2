@@ -26,7 +26,7 @@ public class InventoryGameState : IGameState
         {Rarity.Legendary, Color.Orange}
     };
 
-    public InventoryGameState(IGameState previousGameState)
+    public InventoryGameState()
     {
         var playerInventory = (Inventory)MainGame.PlayerEntity.Components[9];
         _items = playerInventory.Items;
