@@ -1,4 +1,4 @@
-﻿using game.GameEngine.Systems;
+using game.GameEngine.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -36,6 +36,7 @@ namespace game.GameEngine.GameStates
 
         public MapGameState()
         {
+            HealthSystem.Act();
             CameraSystem.Update();
             FieldOfViewSystem.Act();
             PathfindingSystem.Act();
