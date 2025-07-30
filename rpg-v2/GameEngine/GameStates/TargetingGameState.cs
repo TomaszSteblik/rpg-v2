@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using rpg_v2;
+using Serilog;
 using Action = System.Action;
 
 namespace game.GameEngine.GameStates;
@@ -32,7 +33,13 @@ public class TargetingGameState : IGameState
     private void InitInputManager(Action<Position> onTargetSelected, Action onTargetCancelled)
     {
         _inputManager.StartTrackingKey(Keys.Escape, onTargetCancelled);
-        _inputManager.StartTrackingKey(Keys.Enter, () => onTargetSelected.Invoke(_target));
+        _inputManager.StartTrackingKey(Keys.Enter, () =>
+        {
+            if (_playerVision.CellsInLightOfSight[_target.X][_target.Y])
+                onTargetSelected.Invoke(_target);
+            else
+                Log.Information("Target is not in light of sight, please change target.");
+        });
         _inputManager.StartTrackingKey(Keys.Left, () =>
             CheckDistanceAndMoveAction(new Position(){X = _target.X - 1, Y = _target.Y}), true);
         _inputManager.StartTrackingKey(Keys.Right, () =>
