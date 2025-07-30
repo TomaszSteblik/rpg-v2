@@ -56,7 +56,7 @@ namespace game.GameEngine.Systems
         [Description("Returns distance between two nodes, using pitagoras theorem")]
         public static double CalculateDistance(Node start, Node goal)
         {
-            return Math.Pow((start.X - goal.Y), 2) + Math.Pow(start.Y - goal.Y, 2);
+            return Math.Sqrt(Math.Pow((start.X - goal.X), 2) + Math.Pow(start.Y - goal.Y, 2));
         }
 
         [Description("Returns true if can return out var list of nodes(path) from starting node to destination node, " +

@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using game.GameEngine.Components;
+using game.GameEngine.GameObjects.Items.Magic.Scrolls;
 using game.GameEngine.GameObjects.Items.Utility.Potions;
 using game.GameEngine.GameObjects.Npcs;
 using game.GameEngine.Systems.Helpers;
@@ -32,7 +33,7 @@ namespace game.GameEngine
             var startingX = MainGame.Random.Next(1, height - 1);
             var startingY = MainGame.Random.Next(1, width - 1);
 
-            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8, 9 });
+            MainGame.PlayerEntity = EcsManager.RegisterNewEntity(new[] { 0, 1, 3, 2, 4, 6, 8, 9, 10 });
 
             var position = (Position)MainGame.PlayerEntity.Components[0];
             var spriteP = (Sprite)MainGame.PlayerEntity.Components[1];
@@ -41,7 +42,9 @@ namespace game.GameEngine
             var playerData = (PlayerData)MainGame.PlayerEntity.Components[2];
             var playerHealth = (Health)MainGame.PlayerEntity.Components[6];
             var playerInventory = (Inventory)MainGame.PlayerEntity.Components[9];
+            var playerMana = (Mana)MainGame.PlayerEntity.Components[EcsConsts.ECS_COMPONENT_INDEX_MANA];
             playerHealth.CurrentHp = 30;
+            playerMana.CurrentMana = playerMana.MaxMana;
             position.X = startingX;
             position.Y = startingY;
             spriteP.Color = Color.White;
@@ -53,6 +56,7 @@ namespace game.GameEngine
             playerData.MeleeDamage = 4;
             playerData.IsPlayerCharacter = true;
             playerInventory.Items.Add(new SmallHealthPotion());
+            playerInventory.Items.Add(new FireballScroll());
 
             var currentColumn = startingX;
             var currentRow = startingY;

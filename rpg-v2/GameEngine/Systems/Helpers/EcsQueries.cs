@@ -13,9 +13,9 @@ public static class EcsQueries
     {
         if (EcsManager.Version != _collidablesAtPositionVersion)
         {
-            _collidablesAtPosition = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 })
-                .Where(x => ((Physics)x.Components[3]).IsCollidable)
-                .Select(x => (Position)x.Components[0])
+            _collidablesAtPosition = EcsManager.QueryEntitiesByComponentsIndexes(new[] { EcsConsts.ECS_COMPONENT_INDEX_POSITION, EcsConsts.ECS_COMPONENT_INDEX_PHYSICS })
+                .Where(x => ((Physics)x.Components[EcsConsts.ECS_COMPONENT_INDEX_PHYSICS]).IsCollidable)
+                .Select(x => (Position)x.Components[EcsConsts.ECS_COMPONENT_INDEX_POSITION])
                 .ToArray();
             _collidablesAtPositionVersion = EcsManager.Version;
         }
@@ -29,9 +29,9 @@ public static class EcsQueries
     {
         if (EcsManager.Version != _freePositionsVersion)
         {
-            var freePositions = EcsManager.QueryEntitiesByComponentsIndexes(new[] { 0, 3 })
-                .Where(x => ((Physics)x.Components[3]).IsCollidable is false)
-                .Select(x => (Position)x.Components[0])
+            var freePositions = EcsManager.QueryEntitiesByComponentsIndexes(new[] { EcsConsts.ECS_COMPONENT_INDEX_POSITION, EcsConsts.ECS_COMPONENT_INDEX_PHYSICS })
+                .Where(x => ((Physics)x.Components[EcsConsts.ECS_COMPONENT_INDEX_PHYSICS]).IsCollidable is false)
+                .Select(x => (Position)x.Components[EcsConsts.ECS_COMPONENT_INDEX_POSITION])
                 .ToArray();
 
             _freePositions = freePositions.Except(GetCollidablePositions()).ToArray();
@@ -40,5 +40,16 @@ public static class EcsQueries
         }
         
         return _freePositions;
+    }
+    
+    public static Entity[] GetEntitiesAtPosition(int x, int y)
+    {
+        return EcsManager.QueryEntitiesByComponentsIndexes(new[] { EcsConsts.ECS_COMPONENT_INDEX_POSITION })
+            .Where(entity => 
+            {
+                var position = (Position)entity.Components[EcsConsts.ECS_COMPONENT_INDEX_POSITION];
+                return position.X == x && position.Y == y;
+            })
+            .ToArray();
     }
 }
